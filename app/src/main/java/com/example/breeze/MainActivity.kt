@@ -1,8 +1,12 @@
 package com.example.breeze
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,9 +56,50 @@ class MainActivity : AppCompatActivity() {
 
 
             override fun onFailure(call: Call<MyData?>, t: Throwable) {
-                // if api call fails
-                Log.d("Main Activity ", "onFailure: " + t.message)
+                Log.d("Main Activity", "onFailure: " + t.message)
+                Toast.makeText(applicationContext, "Failed to load data", Toast.LENGTH_LONG).show()
+            }
+
+        })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_item, menu)
+        val item = menu?.findItem(R.id.search_action)
+        val searchView = item?.actionView as SearchView
+
+        setupSearch(searchView)
+        return true
+    }
+
+    private fun setupSearch(searchView: SearchView) {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val searchText = newText?.lowercase() ?: ""
+                if (searchText.isNotEmpty()) {
+                    val filteredList = list.filter {
+                        it.title.lowercase().contains(searchText)
+                    }
+                    tempArraylist.clear()
+                    tempArraylist.addAll(filteredList)
+                } else {
+                    tempArraylist.clear()
+                    tempArraylist.addAll(list)
+                }
+                myAdapter.filterList(tempArraylist)
+                recyclerView.adapter!!.notifyDataSetChanged()
+                return false
             }
         })
     }
+
+
+
+
+
 }

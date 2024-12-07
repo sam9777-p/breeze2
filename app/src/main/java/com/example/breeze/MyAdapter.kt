@@ -1,5 +1,6 @@
 package com.example.breeze
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +11,21 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.squareup.picasso.Picasso
 
-class MyAdapter(val context : Activity, val list : ArrayList<Article>) :
+class MyAdapter(val context : Activity, var list : ArrayList<Article>) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>(){
 
-    fun deleteitem(position:Int){
+    @SuppressLint("NotifyDataSetChanged")
+    fun deleteItem(position:Int){
         list.removeAt(position)
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    fun addItem(position: Int, product: Article){
+        list.add(position,product)
         notifyDataSetChanged()
     }
-    fun additem(position: Int,product: Article){
-        list.add(position,product)
+    @SuppressLint("NotifyDataSetChanged")
+    fun filterList(list1: ArrayList<Article>){
+        list = list1
         notifyDataSetChanged()
     }
 
