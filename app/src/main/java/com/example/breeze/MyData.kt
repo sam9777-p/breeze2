@@ -1,7 +1,12 @@
 package com.example.breeze
 
 data class MyData(
-    val articles: ArrayList<Article>,
-    val status: String,
-    val totalResults: Int
+    val data: ArrayList<Data>,
+    val hitsPerPage: Int,
+    val page: Int,
+    val size: Int,
+    val success: Boolean,
+    val timeMs: Int,
+    val totalHits: Int,
+    val totalPages: Int
 )

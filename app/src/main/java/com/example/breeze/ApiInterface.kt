@@ -1,14 +1,12 @@
 
 package com.example.breeze
-
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface ApiInterface {
-    @GET("top-headlines")
-    fun getTopHeadlines(
-        @Query("country") country: String,
-        @Query("apiKey") apiKey: String
-    ): Call<MyData>  // Corrected return type
+        @Headers("x-rapidapi-key:756dc2f204msh94e5ee29b5cce4dp19086ajsnb5ae69706c9c", "x-rapidapi-host: news-api14.p.rapidapi.com")
+    @GET("/v2/trendings?topic=Politics&language=en")
+    fun getNews(): Call<MyData>
 }
