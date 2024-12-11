@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Core Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="deleteColor">#CE1C0E</color>
-    <color name="archiveColor">#36F44F</color>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="yellow">#FFC801</color>
+
+    <!-- Action Colors -->
+    <color name="deleteColor">#D32F2F</color>     <!-- Red for Delete -->
+    <color name="archiveColor">#388E3C</color>    <!-- Green for Archive -->
+
+    <!-- Theme Colors -->
+    <color name="primary">#6200EE</color>          <!-- Deep Purple -->
+    <color name="primaryDark">#3700B3</color>      <!-- Darker Purple -->
+    <color name="accent">#03DAC6</color>           <!-- Teal Accent -->
+
+    <!-- Material Design Colors -->
+    <color name="purple_200">#BB86FC</color>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="teal_200">#03DAC5</color>
+    <color name="teal_700">#018786</color>
+    <color name="backgroundLight">#FFFFFF</color>   <!-- White for Light Theme -->
+    <color name="backgroundDark">#121212</color>    <!-- Dark Background -->
+
+    <!-- Card Background -->
+    <color name="cardBackgroundLight">#FFFFFF</color>   <!-- White for Light Theme -->
+    <color name="cardBackgroundDark">#1E1E1E</color>   <!-- Dark for Dark Theme -->
+    <!-- Background Colors -->
+    <color name="background">#F5F5F5</color>       <!-- Light Gray Background -->
+    <color name="cardBackground">#FFFFFF</color>   <!-- White Card Background -->
+
+    <!-- Text Colors -->
+    <color name="textPrimary">#212121</color>      <!-- Dark Text -->
+    <color name="textSecondary">#757575</color>    <!-- Light Text -->
+
+    <!-- Highlight and Warnings -->
+    <color name="yellow">#FFC801</color>           <!-- Warning Color -->
 
 </resources>

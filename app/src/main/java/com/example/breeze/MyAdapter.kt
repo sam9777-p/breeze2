@@ -1,21 +1,18 @@
 package com.example.breeze
 
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.firebase.database.FirebaseDatabase
-import com.squareup.picasso.Picasso
 
-class MyAdapter(val context : Activity, var list : ArrayList<Data>) :
+class MyAdapter(val context: Context, var list: ArrayList<Data>) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>(){
         var lastpos = -1;
     private var onBookmarkClickListener: ((Data) -> Unit)? = null

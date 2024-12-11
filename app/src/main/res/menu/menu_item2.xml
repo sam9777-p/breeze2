@@ -2,20 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/home"
-        android:title="Home"
-        android:icon="@drawable/baseline_add_home_24"
+        android:id="@+id/change_logo"
+        android:title="Change Logo"
+        android:icon="@drawable/baseline_add_circle_outline_24"
         app:showAsAction="ifRoom" />
 
     <item
         android:title="Search"
         android:id="@+id/search_action"
         android:icon="@drawable/baseline_search_24"
-
-        app:showAsAction="ifRoom" />
-    <item
-        android:title="Bookmarks"
-        android:id="@+id/bookmarks"
-        android:icon="@drawable/ic_bookmark"
-        app:showAsAction="ifRoom" />
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
 </menu>
