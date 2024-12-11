@@ -25,8 +25,8 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: MyAdapter
-    private val newsList = ArrayList<Data>()
-    lateinit var list: ArrayList<Data>
+    //private val newsList = ArrayList<Data>()
+    var list= ArrayList<Data>()
     private lateinit var auth: FirebaseAuth
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,7 +34,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         searchView = view.findViewById(R.id.search_view)
         recyclerView = view.findViewById(R.id.recycler_view_search)
         recyclerView.layoutManager=LinearLayoutManager(requireContext())
-        myAdapter = MyAdapter(requireContext(),newsList)
+        myAdapter = MyAdapter(requireContext(),list)
         recyclerView.adapter = myAdapter
 
         auth = FirebaseAuth.getInstance()
@@ -67,10 +67,11 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             override fun onResponse(call: Call<MyData?>, response: Response<MyData?>) {
                 val responseBody = response.body()
                 val products = responseBody?.data ?: emptyList<Data>()
+                list.clear()
                 list.addAll(products)
-                newsList.addAll(list)
+                //list.addAll(list)
 
-                myAdapter = MyAdapter(requireContext(), newsList)
+                myAdapter = MyAdapter(requireContext(), list)
                 recyclerView.adapter = myAdapter
                 recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
