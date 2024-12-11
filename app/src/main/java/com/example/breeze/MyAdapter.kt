@@ -34,6 +34,11 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) :
         list = list1
         notifyDataSetChanged()
     }
+    fun updateData(newList: ArrayList<Data>) {
+        list.clear()
+        list.addAll(newList)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.eachitem, parent, false)

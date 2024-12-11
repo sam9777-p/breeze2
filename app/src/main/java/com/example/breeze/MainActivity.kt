@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.home -> replaceWithFragment(Home()) // Show Home Fragment
                 R.id.search_action -> replaceWithFragment(SearchFragment()) // Show Search Fragment
-               // R.id.bookmarks -> replaceWithFragment(BookmarksFragment()) // Show Bookmarks Fragment
+                R.id.bookmarks -> replaceWithFragment(Bookmarks()) // Show Bookmarks Fragment
             }
             true
         }
