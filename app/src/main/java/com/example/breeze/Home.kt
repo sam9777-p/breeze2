@@ -28,30 +28,26 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Collections
-class Home : Fragment() {
+class Home : Fragment(R.layout.home_fragment) {
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: MyAdapter
-    private val newsList = ArrayList<Data>()
-    private lateinit var list: ArrayList<Data>
+   // private val newsList = ArrayList<Data>()
+    private var list= ArrayList<Data>()
     private lateinit var auth: FirebaseAuth
     //private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.home_fragment, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //val view = inflater.inflate(, container, false)
         recyclerView = view.findViewById(R.id.recyclerView)
         //swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        myAdapter = MyAdapter(requireContext(), newsList)
+        myAdapter = MyAdapter(requireContext(), list)
         recyclerView.adapter = myAdapter
 
-
-
         auth = FirebaseAuth.getInstance()
-        return view
+        fetchNews()
+
     }
 
     private fun fetchNews() {
@@ -66,14 +62,9 @@ class Home : Fragment() {
             override fun onResponse(call: Call<MyData?>, response: Response<MyData?>) {
                 val responseBody = response.body()
                 val products = responseBody?.data ?: emptyList<Data>()
-
-                // Initialize list if not already done
-                if (!::list.isInitialized) {
-                    list = ArrayList()
-                }
-
+                list.clear()
                 list.addAll(products)
-                newsList.addAll(list)
+                //newsList.addAll(list)
 
                 myAdapter.notifyDataSetChanged()
 

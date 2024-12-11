@@ -21,19 +21,16 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Collections
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(R.layout.search_fragment) {
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: MyAdapter
     private val newsList = ArrayList<Data>()
     lateinit var list: ArrayList<Data>
-    lateinit var auth: FirebaseAuth
+    private lateinit var auth: FirebaseAuth
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.search_fragment, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //val view = inflater.inflate(R.layout.search_fragment, container, false)
         searchView = view.findViewById(R.id.search_view)
         recyclerView = view.findViewById(R.id.recycler_view_search)
         recyclerView.layoutManager=LinearLayoutManager(requireContext())
@@ -42,7 +39,7 @@ class SearchFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         setupSearchListener()
-        return view
+        //return view
     }
 
     private fun setupSearchListener() {
