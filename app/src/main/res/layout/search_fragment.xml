@@ -2,22 +2,49 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <!-- Search Bar -->
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <!-- Heading Text -->
+        <TextView
+            android:id="@+id/tv_search_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search News"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Search Bar -->
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:queryHint="Search for news..." />
+            android:layout_below="@id/tv_search_heading"
+            android:queryHint="Enter keywords or topics..." />
+
+        <!-- Hint Text -->
+        <TextView
+            android:id="@+id/tv_search_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Example: Technology, Sports, Politics"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_below="@id/search_view"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp" />
 
         <!-- RecyclerView for Search Results -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/search_view" />
+            android:layout_below="@id/tv_search_hint"
+            android:layout_marginTop="8dp" />
     </RelativeLayout>
 
 </FrameLayout>

@@ -6,10 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:background="@drawable/welcome2"
+    android:layout_gravity="center"
+    android:background="@drawable/tri1"
     tools:context=".splashscreen">
 
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center"
+         android:text="WELCOME"
+         android:textSize="80dp"
+         android:textStyle="italic"
+         android:layout_marginTop="230dp"
+         android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="         to Breeze"
+            android:textSize="60dp"
+            android:textStyle="italic"
+            android:textColor="@color/black"/>
 
 </LinearLayout>
 

@@ -38,6 +38,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         recyclerView.adapter = myAdapter
 
         auth = FirebaseAuth.getInstance()
+        fetchNews("General")
         setupSearchListener()
         //return view
     }
@@ -55,6 +56,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             }
         })
     }
+
     private fun fetchNews(query: String) {
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://news-api14.p.rapidapi.com/v2/")

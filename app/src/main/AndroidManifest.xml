@@ -32,6 +32,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+
             />
 
         <!-- SignIn Activity -->
