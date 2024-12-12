@@ -6,6 +6,7 @@
     app:cardElevation="5dp"
     app:cardCornerRadius="20dp"
     android:layout_margin="9dp"
+    app:cardBackgroundColor="@color/white"
     android:id="@+id/cardItem">
 
     <LinearLayout
@@ -46,7 +47,8 @@
                 android:layout_height="120dp"
                 android:id="@+id/articleExcerpt"
                 android:text="    News Content  "
-                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textStyle="italic"
                 android:textSize="14sp"/>
             <ImageButton
 

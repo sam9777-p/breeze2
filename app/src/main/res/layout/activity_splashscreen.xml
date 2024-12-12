@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_gravity="center"
     android:background="@drawable/tri1"
     tools:context=".splashscreen">
 
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_gravity="center"
-         android:text="WELCOME"
-         android:textSize="80dp"
-         android:textStyle="italic"
-         android:layout_marginTop="230dp"
-         android:textColor="@color/black"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="         to Breeze"
-            android:textSize="60dp"
-            android:textStyle="italic"
-            android:textColor="@color/black"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
-</LinearLayout>
+
+        android:text="WELCOME"
+        android:textColor="@color/black"
+        android:textSize="80dp"
+
+        android:textStyle="italic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:text="         to Breeze"
+        android:textColor="@color/black"
+        android:textSize="60dp"
+        android:textStyle="italic" />
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        app:lottie_autoPlay="true"
+        android:id="@+id/lottieAnimationView"
+        app:lottie_rawRes="@raw/anim1"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
 
