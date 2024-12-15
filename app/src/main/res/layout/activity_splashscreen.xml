@@ -28,8 +28,8 @@
         android:textSize="60dp"
         android:textStyle="italic" />
     <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="400dp"
-        android:layout_height="400dp"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
         app:lottie_autoPlay="true"
         android:id="@+id/lottieAnimationView"
         app:lottie_rawRes="@raw/anim1"

@@ -4,8 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/try1"
+    android:background="@drawable/rainbow"
     tools:context=".SignInActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="168dp"
+        android:text="WELCOME"
+        android:textColor="@color/black"
+        android:textSize="63sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailLayout"
@@ -53,13 +66,16 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
+
+
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:background="#434545"
+        android:background="@color/black"
         android:text="Sign In"
         android:textColor="@color/white"
         android:textStyle="bold"
@@ -71,10 +87,12 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="25dp"
         android:clickable="true"
         android:focusable="true"
         android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="18sp"
         android:text="Not Registered Yet? Sign Up!"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"

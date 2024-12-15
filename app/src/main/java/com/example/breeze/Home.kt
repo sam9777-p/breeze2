@@ -1,5 +1,6 @@
 package com.example.breeze
 
+import android.content.Intent
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.firebase.database.FirebaseDatabase
 import retrofit2.Call
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,10 +35,13 @@ class Home : Fragment(R.layout.home_fragment) {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         myAdapter = MyAdapter(requireContext(), list)
         recyclerView.adapter = myAdapter
-
+        var fab =view.findViewById<FloatingActionButton>(R.id.fab)
         auth = FirebaseAuth.getInstance()
         fetchNews()
+        fab.setOnClickListener(){
+            startActivity(Intent(requireContext(),pfp::class.java))
 
+        }
         swipeRefreshLayout.setOnRefreshListener {
             fetchNews()
         }
@@ -62,7 +67,40 @@ class Home : Fragment(R.layout.home_fragment) {
                     myAdapter.notifyDataSetChanged()
                 }
                 swipeRefreshLayout.isRefreshing = false
+                myAdapter.setOnBookmarkClickListener { data ->
+                    addBookmark(data)
+                }
+
+                val swipeGesture = object : SwipeGesture(requireContext()) {
+                    override fun onMove(
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        target: RecyclerView.ViewHolder
+                    ): Boolean {
+                        val fromPos = viewHolder.adapterPosition
+                        val toPos = target.adapterPosition
+                        Collections.swap(list, fromPos, toPos)
+                        myAdapter.notifyItemMoved(fromPos, toPos)
+                        return false
+                    }
+
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                        when (direction) {
+                            ItemTouchHelper.LEFT -> myAdapter.deleteItem(viewHolder.adapterPosition)
+                            ItemTouchHelper.RIGHT -> {
+                                val item = list[viewHolder.adapterPosition]
+                                myAdapter.deleteItem(viewHolder.adapterPosition)
+                                myAdapter.addItem(list.size, item)
+                            }
+                        }
+                    }
+                }
+                val touchHelper = ItemTouchHelper(swipeGesture)
+                touchHelper.attachToRecyclerView(recyclerView)
             }
+
+
+
 
             override fun onFailure(call: Call<MyData?>, t: Throwable) {
                 Log.e("HomeFragment", "onFailure: ${t.message}")
@@ -96,4 +134,6 @@ class Home : Fragment(R.layout.home_fragment) {
                 }
         }
     }
+
+
 }
