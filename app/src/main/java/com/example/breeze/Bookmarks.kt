@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.widget.ProgressBar
 
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -24,6 +25,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import java.util.Collections
+
 
 
 class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
@@ -33,6 +36,7 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
    // private val newsList = ArrayList<Data>()
     private var list= ArrayList<Data>()
     private lateinit var auth: FirebaseAuth
+    private lateinit var progressBar: ProgressBar
     //private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
 
@@ -73,5 +77,54 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
 
         })
 
+
+        val swipeGesture = object : SwipeGesture(requireContext()) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                val fromPos = viewHolder.adapterPosition
+                val toPos = target.adapterPosition
+                Collections.swap(list, fromPos, toPos)
+                myAdapter.notifyItemMoved(fromPos, toPos)
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                        val position = viewHolder.adapterPosition
+                        val itemKey = list[position].key
+                        removeItemFromFirebase(itemKey)
+                        myAdapter.deleteItem(viewHolder.adapterPosition)
+                    }
+                    ItemTouchHelper.RIGHT -> {
+                        val item = list[viewHolder.adapterPosition]
+                        myAdapter.deleteItem(viewHolder.adapterPosition)
+                        myAdapter.addItem(list.size, item)
+                    }
+                }
+            }
+        }
+        val touchHelper = ItemTouchHelper(swipeGesture)
+        touchHelper.attachToRecyclerView(recyclerView)
+
+
     }
+    private fun removeItemFromFirebase(itemKey: String) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val databaseRef = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId).child(itemKey)
+
+        databaseRef.removeValue()
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Item removed successfully", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(requireContext(), "Failed to remove item: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+
+
 }

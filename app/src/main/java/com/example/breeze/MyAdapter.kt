@@ -23,6 +23,7 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) :
     @SuppressLint("NotifyDataSetChanged")
     fun deleteItem(position:Int){
         list.removeAt(position)
+        notifyDataSetChanged()
     }
     @SuppressLint("NotifyDataSetChanged")
     fun addItem(position: Int, product: Data){

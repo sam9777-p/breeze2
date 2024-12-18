@@ -1,10 +1,10 @@
 package com.example.breeze
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -21,12 +21,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Collections
 
+
 class SearchFragment : Fragment(R.layout.search_fragment) {
     private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: MyAdapter
     //private val newsList = ArrayList<Data>()
     var list= ArrayList<Data>()
+    private lateinit var progressBar: ProgressBar
     private lateinit var auth: FirebaseAuth
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,7 +38,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         recyclerView.layoutManager=LinearLayoutManager(requireContext())
         myAdapter = MyAdapter(requireContext(),list)
         recyclerView.adapter = myAdapter
-
+        progressBar=view.findViewById(R.id.progressBar)
         auth = FirebaseAuth.getInstance()
         fetchNews("General")
         setupSearchListener()
@@ -58,6 +60,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     }
 
     private fun fetchNews(query: String) {
+        progressBar.visibility = View.VISIBLE
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://news-api14.p.rapidapi.com/v2/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -67,6 +70,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         val retrofitData = api.getNews(topic=query)
         retrofitData.enqueue(object : Callback<MyData?> {
             override fun onResponse(call: Call<MyData?>, response: Response<MyData?>) {
+
                 val responseBody = response.body()
                 val products = responseBody?.data ?: emptyList<Data>()
                 list.clear()
@@ -76,6 +80,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
                 myAdapter = MyAdapter(requireContext(), list)
                 recyclerView.adapter = myAdapter
                 recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                progressBar.visibility = View.GONE
 
                 /*swipeRefreshLayout.setOnRefreshListener {
                     list.clear()
@@ -103,7 +108,11 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
 
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                         when (direction) {
-                            ItemTouchHelper.LEFT -> myAdapter.deleteItem(viewHolder.adapterPosition)
+                            ItemTouchHelper.LEFT -> {
+
+                                myAdapter.deleteItem(viewHolder.adapterPosition)
+
+                            }
                             ItemTouchHelper.RIGHT -> {
                                 val item = list[viewHolder.adapterPosition]
                                 myAdapter.deleteItem(viewHolder.adapterPosition)
@@ -126,6 +135,9 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
         val key = database.push().key
         if (key != null) {
+            data.key=key
+        }
+        if (key != null) {
             database.child(key).setValue(data)
                 .addOnSuccessListener {
                     Toast.makeText(requireContext(), "Bookmark added!", Toast.LENGTH_SHORT).show()
@@ -135,5 +147,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
                 }
         }
     }
+
+
 
 }

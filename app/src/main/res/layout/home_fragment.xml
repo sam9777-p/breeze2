@@ -20,7 +20,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="275dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/bulldog2"
+                            android:src="@drawable/tri4"
                             app:layout_collapseMode="parallax" />
 
                         <androidx.appcompat.widget.Toolbar
@@ -56,4 +56,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:indeterminate="true" />
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

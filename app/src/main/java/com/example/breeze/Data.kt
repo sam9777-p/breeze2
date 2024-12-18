@@ -4,7 +4,7 @@ package com.example.breeze
 
 
 data class Data(
-
+    var key:String="",
     val authors: List<String> = emptyList(),
 
     val contentLength: Int = 0,

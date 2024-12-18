@@ -11,8 +11,8 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 abstract class SwipeGesture(context: Context) : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN,ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT ) {
     val deleteColor = ContextCompat.getColor(context, R.color.deleteColor)
     val archiveColor = ContextCompat.getColor(context, R.color.archiveColor)
-    val deleteIcon = R.drawable.img1
-    val archiveIcon = R.drawable.img2
+    val deleteIcon = R.drawable.tri1
+    val archiveIcon = R.drawable.tri1
 
 
 

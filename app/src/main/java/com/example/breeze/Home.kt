@@ -7,6 +7,7 @@ import retrofit2.Call
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -27,6 +28,7 @@ class Home : Fragment(R.layout.home_fragment) {
     private lateinit var myAdapter: MyAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var list = ArrayList<Data>()
+    private lateinit var progressBar: ProgressBar
     private lateinit var auth: FirebaseAuth
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,6 +37,7 @@ class Home : Fragment(R.layout.home_fragment) {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         myAdapter = MyAdapter(requireContext(), list)
         recyclerView.adapter = myAdapter
+        progressBar = view.findViewById(R.id.progressBar)
         var fab =view.findViewById<FloatingActionButton>(R.id.fab)
         auth = FirebaseAuth.getInstance()
         fetchNews()
@@ -48,6 +51,8 @@ class Home : Fragment(R.layout.home_fragment) {
     }
 
     private fun fetchNews() {
+        progressBar.visibility = View.VISIBLE
+
         val retrofit = Retrofit.Builder()
             .baseUrl("https://news-api14.p.rapidapi.com/v2/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -66,6 +71,8 @@ class Home : Fragment(R.layout.home_fragment) {
                     list.addAll(products)
                     myAdapter.notifyDataSetChanged()
                 }
+                progressBar.visibility = View.GONE
+
                 swipeRefreshLayout.isRefreshing = false
                 myAdapter.setOnBookmarkClickListener { data ->
                     addBookmark(data)
@@ -124,6 +131,9 @@ class Home : Fragment(R.layout.home_fragment) {
         val userId = auth.currentUser?.uid ?: return
         val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
         val key = database.push().key
+        if (key != null) {
+            data.key=key
+        }
         key?.let {
             database.child(it).setValue(data)
                 .addOnSuccessListener {
