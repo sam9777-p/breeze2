@@ -48,10 +48,12 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         myAdapter = MyAdapter(requireContext(), list)
         recyclerView.adapter = myAdapter
-
+        progressBar=view.findViewById(R.id.Pg_bar)
         auth = FirebaseAuth.getInstance()
         val userId = auth.currentUser?.uid ?: return
+
         val databaseRef = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
+        progressBar.visibility = View.VISIBLE
 
         databaseRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -65,6 +67,7 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
                     }
                 }
                 myAdapter.updateData(bookmarkList)
+                progressBar.visibility = View.GONE
 
             }
 
@@ -73,6 +76,7 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
                     requireContext(),
                     "Failed to load bookmarks: ${error.message}",
                     Toast.LENGTH_SHORT
+
                 ).show()
             }
 
