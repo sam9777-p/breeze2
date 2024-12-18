@@ -6,6 +6,7 @@ import com.example.breeze.MyData
 import com.google.firebase.database.FirebaseDatabase
 import retrofit2.Call
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -109,6 +110,19 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
         }
         val touchHelper = ItemTouchHelper(swipeGesture)
         touchHelper.attachToRecyclerView(recyclerView)
+
+        myAdapter.setOnItemClickListener(object : MyAdapter.onItemClickListener {
+            override fun onItemClicking(position: Int) {
+                // on clicking each item , what action do you want to perform
+                val intent = Intent(requireContext(), Webview::class.java)
+
+                intent.putExtra("url", list[position].url)
+                startActivity(intent)
+
+
+            }
+
+        })
 
 
     }

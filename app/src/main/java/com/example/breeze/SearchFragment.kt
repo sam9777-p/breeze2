@@ -1,4 +1,5 @@
 package com.example.breeze
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -41,7 +42,20 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         progressBar=view.findViewById(R.id.progressBar)
         auth = FirebaseAuth.getInstance()
         fetchNews("General")
+
+        myAdapter.setOnItemClickListener(object : MyAdapter.onItemClickListener {
+            override fun onItemClicking(position: Int) {
+
+                val intent = Intent(requireContext(), Webview::class.java)
+                intent.putExtra("url", list[position].url)
+                startActivity(intent)
+
+
+            }
+
+        })
         setupSearchListener()
+
         //return view
     }
 

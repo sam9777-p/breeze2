@@ -48,6 +48,23 @@ class Home : Fragment(R.layout.home_fragment) {
         swipeRefreshLayout.setOnRefreshListener {
             fetchNews()
         }
+
+        myAdapter.setOnItemClickListener(object : MyAdapter.onItemClickListener {
+            override fun onItemClicking(position: Int) {
+                // on clicking each item , what action do you want to perform
+                val intent = Intent(requireContext(), Webview::class.java)
+                intent.putExtra("url", list[position].url)
+                startActivity(intent)
+
+
+
+            }
+
+        })
+
+
+
+
     }
 
     private fun fetchNews() {

@@ -14,7 +14,19 @@ import com.google.android.material.imageview.ShapeableImageView
 
 class MyAdapter(val context: Context, var list: ArrayList<Data>) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>(){
-        var lastpos = -1;
+
+    private lateinit var myListener: onItemClickListener
+
+    interface onItemClickListener {
+        fun onItemClicking(position: Int)
+    }
+
+    fun setOnItemClickListener(listener2 : onItemClickListener){
+        myListener = listener2
+    }
+
+    var lastpos = -1;
+
     private var onBookmarkClickListener: ((Data) -> Unit)? = null
     fun setOnBookmarkClickListener(listener: (Data) -> Unit) {
         onBookmarkClickListener = listener
@@ -44,7 +56,7 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.eachitem, parent, false)
 
-        return MyViewHolder(itemView)
+        return MyViewHolder(itemView,myListener)
     }
 
     override fun getItemCount(): Int {
@@ -74,7 +86,7 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) :
 
     }
 
-    class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
+    class MyViewHolder(itemView : View,listener2: onItemClickListener) : RecyclerView.ViewHolder(itemView){
         var title : TextView
         var image : ShapeableImageView
         var excerpt : TextView
@@ -84,6 +96,9 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) :
             image = itemView.findViewById(R.id.articleImage)
             excerpt = itemView.findViewById(R.id.articleExcerpt)
             bookmarkButton = itemView.findViewById(R.id.bookmarkButton)
+            itemView.setOnClickListener {
+                listener2.onItemClicking(adapterPosition)
+            }
         }
 
     }
