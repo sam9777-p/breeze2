@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,12 +37,11 @@ class Home : Fragment(R.layout.home_fragment) {
         myAdapter = MyAdapter(requireContext(), list)
         recyclerView.adapter = myAdapter
         progressBar = view.findViewById(R.id.progressBar)
-        var fab =view.findViewById<FloatingActionButton>(R.id.fab)
+        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         auth = FirebaseAuth.getInstance()
         fetchNews()
-        fab.setOnClickListener(){
-            startActivity(Intent(requireContext(),pfp::class.java))
-
+        fab.setOnClickListener {
+            startActivity(Intent(requireContext(), pfp::class.java))
         }
         swipeRefreshLayout.setOnRefreshListener {
             fetchNews()
@@ -59,20 +57,11 @@ class Home : Fragment(R.layout.home_fragment) {
 
         myAdapter.setOnItemClickListener(object : MyAdapter.onItemClickListener {
             override fun onItemClicking(position: Int) {
-                // on clicking each item , what action do you want to perform
                 val intent = Intent(requireContext(), Webview::class.java)
                 intent.putExtra("url", list[position].url)
                 startActivity(intent)
-
-
-
             }
-
         })
-
-
-
-
     }
 
     private fun fetchNews() {
@@ -89,20 +78,14 @@ class Home : Fragment(R.layout.home_fragment) {
         call.enqueue(object : Callback<MyData?> {
             override fun onResponse(call: Call<MyData?>, response: Response<MyData?>) {
                 logApiResponse(response)
-                //Log.d("response", "$response")
                 if (response.isSuccessful) {
                     val products = response.body()?.data ?: emptyList<Data>()
                     list.clear()
                     list.addAll(products)
                     fetchBookmarksAndSync()
-                    //myAdapter.notifyDataSetChanged()
                 }
                 progressBar.visibility = View.GONE
-
                 swipeRefreshLayout.isRefreshing = false
-                myAdapter.setOnBookmarkClickListener { data ->
-                    addBookmark(data)
-                }
 
                 val swipeGesture = object : SwipeGesture(requireContext()) {
                     override fun onMove(
@@ -132,9 +115,6 @@ class Home : Fragment(R.layout.home_fragment) {
                 touchHelper.attachToRecyclerView(recyclerView)
             }
 
-
-
-
             override fun onFailure(call: Call<MyData?>, t: Throwable) {
                 Log.e("HomeFragment", "onFailure: ${t.message}")
                 swipeRefreshLayout.isRefreshing = false
@@ -156,10 +136,12 @@ class Home : Fragment(R.layout.home_fragment) {
     private fun addBookmark(data: Data) {
         val userId = auth.currentUser?.uid ?: return
         val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
+
         val key = database.push().key
         if (key != null) {
-            data.key=key
+            data.key = key
         }
+
         key?.let {
             database.child(it).setValue(data)
                 .addOnSuccessListener {
@@ -170,27 +152,40 @@ class Home : Fragment(R.layout.home_fragment) {
                 }
         }
     }
+
     private fun removeBookmark(data: Data) {
+        val key = data.key
         val userId = auth.currentUser?.uid ?: return
-        val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
-        data.key?.let { key ->
-            database.child(key).removeValue()
+
+        if (key != null) {
+            val databaseRef = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId).child(key)
+
+            databaseRef.removeValue()
                 .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Removed from bookmarks!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Bookmark removed successfully", Toast.LENGTH_SHORT).show()
+                    data.isBookmarked = false // Update the bookmark state
+                    myAdapter.notifyDataSetChanged() // Notify adapter to update UI
                 }
-                .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Failed to remove bookmark", Toast.LENGTH_SHORT).show()
+                .addOnFailureListener { exception ->
+                    Toast.makeText(requireContext(), "Failed to remove bookmark: ${exception.message}", Toast.LENGTH_SHORT).show()
                 }
+        } else {
+            Log.e("HomeFragment", "Bookmark key is null")
         }
     }
+
+
     private fun fetchBookmarksAndSync() {
         val userId = auth.currentUser?.uid ?: return
         val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
 
         database.get().addOnSuccessListener { snapshot ->
-            val bookmarkedArticles = snapshot.children.mapNotNull { it.getValue(Data::class.java) }
+            val bookmarkedArticles = snapshot.children.mapNotNull {
+                val data = it.getValue(Data::class.java)
+                data?.key = it.key.toString() // Save the key for removal later
+                data
+            }
 
-            // Update bookmark status in the list
             for (article in list) {
                 article.isBookmarked = bookmarkedArticles.any { it.url == article.url }
             }
@@ -200,6 +195,5 @@ class Home : Fragment(R.layout.home_fragment) {
             Log.e("HomeFragment", "Failed to fetch bookmarks: ${it.message}")
         }
     }
-
-
 }
+

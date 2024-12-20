@@ -137,10 +137,16 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     private fun addBookmark(data: Data) {
         val userId = auth.currentUser?.uid ?: return
         val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
+
+        // Generate a unique key
         val key = database.push().key
+        if (key != null) {
+            data.key = key // Assign the generated key to the Data object
+        }
+
+        // Save the bookmark with the generated key
         key?.let {
-            data.key = key
-            database.child(key).setValue(data)
+            database.child(it).setValue(data)
                 .addOnSuccessListener {
                     Toast.makeText(requireContext(), "Bookmark added!", Toast.LENGTH_SHORT).show()
                 }
@@ -150,25 +156,32 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         }
     }
 
+
     private fun removeBookmark(data: Data) {
-        val userId = auth.currentUser?.uid ?: return
-        val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
-        data.key?.let { key ->
-            database.child(key).removeValue()
-                .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Bookmark removed!", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Failed to remove bookmark", Toast.LENGTH_SHORT).show()
-                }
-        }
+        val itemKey=data.key
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val databaseRef = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId).child(itemKey)
+
+        databaseRef.removeValue()
+            .addOnSuccessListener {
+                myAdapter.notifyDataSetChanged()
+                Toast.makeText(requireContext(), "Item removed successfully", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(requireContext(), "Failed to remove item: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
     }
+
     private fun fetchBookmarksAndSync() {
         val userId = auth.currentUser?.uid ?: return
         val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
 
         database.get().addOnSuccessListener { snapshot ->
-            val bookmarkedArticles = snapshot.children.mapNotNull { it.getValue(Data::class.java) }
+            val bookmarkedArticles = snapshot.children.mapNotNull {
+                val data = it.getValue(Data::class.java)
+                data?.key = it.key.toString() // Assign the key from Firebase to the Data object
+                data
+            }
 
             // Update bookmark status in the list
             for (article in list) {
@@ -180,5 +193,6 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             Log.e("HomeFragment", "Failed to fetch bookmarks: ${it.message}")
         }
     }
+
 
 }
