@@ -49,6 +49,14 @@ class Home : Fragment(R.layout.home_fragment) {
             fetchNews()
         }
 
+        myAdapter.setOnBookmarkToggleListener { data, isBookmarked ->
+            if (isBookmarked) {
+                addBookmark(data)
+            } else {
+                removeBookmark(data)
+            }
+        }
+
         myAdapter.setOnItemClickListener(object : MyAdapter.onItemClickListener {
             override fun onItemClicking(position: Int) {
                 // on clicking each item , what action do you want to perform
@@ -86,7 +94,8 @@ class Home : Fragment(R.layout.home_fragment) {
                     val products = response.body()?.data ?: emptyList<Data>()
                     list.clear()
                     list.addAll(products)
-                    myAdapter.notifyDataSetChanged()
+                    fetchBookmarksAndSync()
+                    //myAdapter.notifyDataSetChanged()
                 }
                 progressBar.visibility = View.GONE
 
@@ -159,6 +168,36 @@ class Home : Fragment(R.layout.home_fragment) {
                 .addOnFailureListener {
                     Toast.makeText(requireContext(), "Failed to add bookmark", Toast.LENGTH_SHORT).show()
                 }
+        }
+    }
+    private fun removeBookmark(data: Data) {
+        val userId = auth.currentUser?.uid ?: return
+        val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
+        data.key?.let { key ->
+            database.child(key).removeValue()
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Removed from bookmarks!", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Failed to remove bookmark", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+    private fun fetchBookmarksAndSync() {
+        val userId = auth.currentUser?.uid ?: return
+        val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
+
+        database.get().addOnSuccessListener { snapshot ->
+            val bookmarkedArticles = snapshot.children.mapNotNull { it.getValue(Data::class.java) }
+
+            // Update bookmark status in the list
+            for (article in list) {
+                article.isBookmarked = bookmarkedArticles.any { it.url == article.url }
+            }
+
+            myAdapter.notifyDataSetChanged()
+        }.addOnFailureListener {
+            Log.e("HomeFragment", "Failed to fetch bookmarks: ${it.message}")
         }
     }
 

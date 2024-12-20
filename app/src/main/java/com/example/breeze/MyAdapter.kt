@@ -15,6 +15,14 @@ import com.google.android.material.imageview.ShapeableImageView
 class MyAdapter(val context: Context, var list: ArrayList<Data>) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>(){
 
+
+    private var onBookmarkToggleListener: ((Data, Boolean) -> Unit)? = null
+
+    fun setOnBookmarkToggleListener(listener3: (Data, Boolean) -> Unit) {
+        onBookmarkToggleListener = listener3
+    }
+
+
     private lateinit var myListener: onItemClickListener
 
     interface onItemClickListener {
@@ -70,9 +78,16 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) :
         Glide.with(holder.itemView.context)
             .load(currentItem.thumbnail)
             .into(holder.image)
+
+        holder.bookmarkButton.setImageResource(
+            if (currentItem.isBookmarked) R.drawable.ic_bookmark else R.drawable.baseline_bookmark_border_24
+        )
+
         setanimation(holder.itemView, position)
         holder.bookmarkButton.setOnClickListener {
-            onBookmarkClickListener?.invoke(currentItem)
+            currentItem.isBookmarked = !currentItem.isBookmarked
+            onBookmarkToggleListener?.invoke(currentItem, currentItem.isBookmarked)
+            notifyItemChanged(position)
         }
 
         //Picasso.get().load(currentItem.urlToImage).into(holder.image);

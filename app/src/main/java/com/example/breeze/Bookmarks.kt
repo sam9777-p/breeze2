@@ -31,12 +31,13 @@ import java.util.Collections
 
 
 class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
-   // private lateinit var searchView: SearchView
+    // private lateinit var searchView: SearchView
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: MyAdapter
-   // private val newsList = ArrayList<Data>()
+    // private val newsList = ArrayList<Data>()
     private var list= ArrayList<Data>()
     private lateinit var auth: FirebaseAuth
+    private val bookmarkedList = ArrayList<Data>()
     private lateinit var progressBar: ProgressBar
     //private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
@@ -51,6 +52,11 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
         progressBar=view.findViewById(R.id.Pg_bar)
         auth = FirebaseAuth.getInstance()
         val userId = auth.currentUser?.uid ?: return
+        myAdapter.setOnBookmarkToggleListener { data, isBookmarked ->
+            if (!isBookmarked) {
+                removeItemFromFirebase(data)
+            }
+        }
 
         val databaseRef = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
         progressBar.visibility = View.VISIBLE
@@ -100,9 +106,9 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
                         val position = viewHolder.adapterPosition
-                        val itemKey = list[position].key
-                        removeItemFromFirebase(itemKey)
-                        myAdapter.deleteItem(viewHolder.adapterPosition)
+                        //val itemKey = list[position].key
+                        removeItemFromFirebase(list[position])
+                        //myAdapter.deleteItem(viewHolder.adapterPosition)
                     }
                     ItemTouchHelper.RIGHT -> {
                         val item = list[viewHolder.adapterPosition]
@@ -130,12 +136,15 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
 
 
     }
-    private fun removeItemFromFirebase(itemKey: String) {
+    private fun removeItemFromFirebase(data: Data) {
+        val itemKey=data.key
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val databaseRef = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId).child(itemKey)
 
         databaseRef.removeValue()
             .addOnSuccessListener {
+                bookmarkedList.remove(data)
+                myAdapter.notifyDataSetChanged()
                 Toast.makeText(requireContext(), "Item removed successfully", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { exception ->

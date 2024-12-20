@@ -25,6 +25,8 @@ data class Data(
 
     val title: String = "",
 
-    val url: String = ""
+    val url: String = "",
+
+    var isBookmarked: Boolean = false
 
 )
