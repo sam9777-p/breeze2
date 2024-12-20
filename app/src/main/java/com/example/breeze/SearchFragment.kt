@@ -158,12 +158,19 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
 
 
     private fun removeBookmark(data: Data) {
-        val itemKey=data.key
+        val itemKey = data.key
+        if (itemKey.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "Unable to remove bookmark. Key is missing.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         val databaseRef = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId).child(itemKey)
 
         databaseRef.removeValue()
             .addOnSuccessListener {
+                data.isBookmarked = false // Update the local data
+                data.key = null.toString() // Clear the key locally
                 myAdapter.notifyDataSetChanged()
                 Toast.makeText(requireContext(), "Item removed successfully", Toast.LENGTH_SHORT).show()
             }
@@ -183,9 +190,16 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
                 data
             }
 
-            // Update bookmark status in the list
+            // Update bookmark status and keys in the list
             for (article in list) {
-                article.isBookmarked = bookmarkedArticles.any { it.url == article.url }
+                val bookmarkMatch = bookmarkedArticles.find { it.url == article.url }
+                if (bookmarkMatch != null) {
+                    article.isBookmarked = true
+                    article.key = bookmarkMatch.key // Sync the correct key
+                } else {
+                    article.isBookmarked = false
+                    article.key = null.toString() // Clear the key if not bookmarked
+                }
             }
 
             myAdapter.notifyDataSetChanged()
@@ -193,6 +207,5 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             Log.e("HomeFragment", "Failed to fetch bookmarks: ${it.message}")
         }
     }
-
 
 }

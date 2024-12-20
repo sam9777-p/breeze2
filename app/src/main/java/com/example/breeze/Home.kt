@@ -1,5 +1,4 @@
 package com.example.breeze
-
 import android.content.Intent
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.firebase.database.FirebaseDatabase
@@ -137,11 +136,13 @@ class Home : Fragment(R.layout.home_fragment) {
         val userId = auth.currentUser?.uid ?: return
         val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
 
+        // Generate a unique key
         val key = database.push().key
         if (key != null) {
-            data.key = key
+            data.key = key // Assign the generated key to the Data object
         }
 
+        // Save the bookmark with the generated key
         key?.let {
             database.child(it).setValue(data)
                 .addOnSuccessListener {
@@ -154,25 +155,28 @@ class Home : Fragment(R.layout.home_fragment) {
     }
 
     private fun removeBookmark(data: Data) {
-        val key = data.key
-        val userId = auth.currentUser?.uid ?: return
 
-        if (key != null) {
-            val databaseRef = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId).child(key)
-
-            databaseRef.removeValue()
-                .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Bookmark removed successfully", Toast.LENGTH_SHORT).show()
-                    data.isBookmarked = false // Update the bookmark state
-                    myAdapter.notifyDataSetChanged() // Notify adapter to update UI
-                }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(requireContext(), "Failed to remove bookmark: ${exception.message}", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Log.e("HomeFragment", "Bookmark key is null")
+        val itemKey = data.key
+        if (itemKey.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "Unable to remove bookmark. Key is missing.", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val databaseRef = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId).child(itemKey)
+
+        databaseRef.removeValue()
+            .addOnSuccessListener {
+                data.isBookmarked = false // Update the local data
+                data.key = null.toString() // Clear the key locally
+                myAdapter.notifyDataSetChanged()
+                Toast.makeText(requireContext(), "Item removed successfully", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(requireContext(), "Failed to remove item: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
     }
+
 
 
     private fun fetchBookmarksAndSync() {
@@ -182,12 +186,20 @@ class Home : Fragment(R.layout.home_fragment) {
         database.get().addOnSuccessListener { snapshot ->
             val bookmarkedArticles = snapshot.children.mapNotNull {
                 val data = it.getValue(Data::class.java)
-                data?.key = it.key.toString() // Save the key for removal later
+                data?.key = it.key.toString() // Assign the key from Firebase to the Data object
                 data
             }
 
+            // Update bookmark status and keys in the list
             for (article in list) {
-                article.isBookmarked = bookmarkedArticles.any { it.url == article.url }
+                val bookmarkMatch = bookmarkedArticles.find { it.url == article.url }
+                if (bookmarkMatch != null) {
+                    article.isBookmarked = true
+                    article.key = bookmarkMatch.key // Sync the correct key
+                } else {
+                    article.isBookmarked = false
+                    article.key = null.toString() // Clear the key if not bookmarked
+                }
             }
 
             myAdapter.notifyDataSetChanged()
@@ -195,5 +207,6 @@ class Home : Fragment(R.layout.home_fragment) {
             Log.e("HomeFragment", "Failed to fetch bookmarks: ${it.message}")
         }
     }
+
 }
 

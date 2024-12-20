@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.breeze.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
 
+
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
@@ -24,6 +25,8 @@ class SignUpActivity : AppCompatActivity() {
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
+
+
         binding.button.setOnClickListener {
             val email = binding.emailEt.text.toString()
             val pass = binding.passET.text.toString()
@@ -47,7 +50,9 @@ class SignUpActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
 
+
             }
         }
     }
 }
+

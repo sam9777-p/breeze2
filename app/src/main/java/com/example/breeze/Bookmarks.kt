@@ -143,7 +143,7 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
 
         databaseRef.removeValue()
             .addOnSuccessListener {
-                bookmarkedList.remove(data)
+                list.remove(data)
                 myAdapter.notifyDataSetChanged()
                 Toast.makeText(requireContext(), "Item removed successfully", Toast.LENGTH_SHORT).show()
             }

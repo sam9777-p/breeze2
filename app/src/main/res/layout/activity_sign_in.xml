@@ -37,7 +37,7 @@
             android:id="@+id/emailEt"
             android:textColor="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="58dp"
             android:hint="Type your Email"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -54,13 +54,14 @@
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:boxCornerRadiusBottomEnd="30dp"
         app:layout_constraintTop_toBottomOf="@id/emailLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passET"
             android:textColor="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="58dp"
             android:hint="Type Your Password"
 
             android:inputType="textPassword" />
