@@ -155,3 +155,5 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
 
 
 }
+
+

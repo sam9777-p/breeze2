@@ -39,12 +39,15 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        app:itemTextColor="@color/black"
         android:layout_alignParentBottom="true"
         app:compatShadowEnabled="true"
+        app:labelVisibilityMode="selected"
+        android:elevation="100dp"
         android:animateLayoutChanges="true"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
+        android:background="@drawable/nv"
+
+
         app:menu="@menu/menu_item" />
 
 </RelativeLayout>

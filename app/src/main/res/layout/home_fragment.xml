@@ -30,20 +30,31 @@
                             app:layout_collapseMode="pin" />
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:baselineAlignBottom="false"
             android:clickable="true"
-            android:src="@drawable/baseline_android_24"
             android:layout_gravity="center"
             app:layout_anchor="@id/appbar"
             app:layout_anchorGravity="end|bottom"
             android:layout_marginRight="30dp"
             android:backgroundTint="#facf5a"
-            android:id="@+id/fab"
+            android:id="@+id/fab" />
 
-            />
+        <ImageView
+            android:id="@+id/overlapping_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:baselineAlignBottom="false"
+            android:elevation="8dp"
+            android:src="@drawable/baseline_person_24"
+            android:layout_gravity="center"
+            app:layout_anchor="@id/appbar"
+            app:layout_anchorGravity="end|bottom"
+            android:layout_marginEnd="30dp"
+             />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
@@ -64,6 +75,5 @@
             android:layout_gravity="center"
             android:visibility="gone"
             android:indeterminate="true" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

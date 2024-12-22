@@ -4,7 +4,7 @@
     <!-- Core Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
+    <color name="purple">#8d72e8</color>
     <!-- Action Colors -->
     <color name="deleteColor">#D32F2F</color>     <!-- Red for Delete -->
     <color name="archiveColor">#388E3C</color>    <!-- Green for Archive -->

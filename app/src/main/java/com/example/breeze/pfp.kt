@@ -3,6 +3,7 @@ package com.example.breeze
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -60,6 +61,7 @@ class pfp : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         editor.putString("${userId}_profilePicUri", profilePicUri.toString())
         editor.apply()  // Save asynchronously
+        Log.d("FAB_UPDATE", "Saved profile picture URI: $profilePicUri for user: $userId")
     }
 
 
@@ -75,4 +77,6 @@ class pfp : AppCompatActivity() {
                 .into(profileImageView)
         }
     }
+
+
 }

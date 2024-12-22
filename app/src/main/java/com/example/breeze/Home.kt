@@ -1,17 +1,24 @@
 package com.example.breeze
 import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.firebase.database.FirebaseDatabase
 import retrofit2.Call
 import android.os.Bundle
+import android.transition.Transition
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Callback
@@ -38,6 +45,14 @@ class Home : Fragment(R.layout.home_fragment) {
         progressBar = view.findViewById(R.id.progressBar)
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         auth = FirebaseAuth.getInstance()
+        auth.currentUser?.let { user ->
+            // Update the overlapping_icon ImageView with the new profile picture
+            val overlappingIcon = view.findViewById<ImageView>(R.id.overlapping_icon)
+            overlappingIcon?.let {
+                loadProfilePicture(user.uid, it)
+            }
+        }
+
         fetchNews()
         fab.setOnClickListener {
             startActivity(Intent(requireContext(), pfp::class.java))
@@ -207,6 +222,32 @@ class Home : Fragment(R.layout.home_fragment) {
             Log.e("HomeFragment", "Failed to fetch bookmarks: ${it.message}")
         }
     }
+    private fun loadProfilePicture(userId: String, profileImageView: ImageView) {
+        val sharedPreferences = requireContext().getSharedPreferences("AppPrefs", MODE_PRIVATE)
+        val profilePicUri = sharedPreferences.getString("${userId}_profilePicUri", null)
+
+        if (profilePicUri != null) {
+            Glide.with(this)
+                .load(Uri.parse(profilePicUri))
+                .placeholder(R.drawable.baseline_person_24)
+                .circleCrop()
+                .into(profileImageView)
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        auth.currentUser?.let { user ->
+            // Update the overlapping_icon ImageView with the new profile picture
+            val overlappingIcon = view?.findViewById<ImageView>(R.id.overlapping_icon)
+            overlappingIcon?.let {
+                loadProfilePicture(user.uid, it)
+            }
+        }
+    }
+
+
+
 
 }
+
 
