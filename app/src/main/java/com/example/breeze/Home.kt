@@ -46,7 +46,6 @@ class Home : Fragment(R.layout.home_fragment) {
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         auth = FirebaseAuth.getInstance()
         auth.currentUser?.let { user ->
-            // Update the overlapping_icon ImageView with the new profile picture
             val overlappingIcon = view.findViewById<ImageView>(R.id.overlapping_icon)
             overlappingIcon?.let {
                 loadProfilePicture(user.uid, it)

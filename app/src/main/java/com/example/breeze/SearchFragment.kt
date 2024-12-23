@@ -121,7 +121,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
                 val products = responseBody?.data ?: emptyList<Data>()
                 list.clear()
                 list.addAll(products)
-                fetchBookmarksAndSync()
+                fetchBookmarksAndSync(query)
                 //myAdapter.notifyDataSetChanged()
                 progressBar.visibility = View.GONE
             }
@@ -179,7 +179,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             }
     }
 
-    private fun fetchBookmarksAndSync() {
+    private fun fetchBookmarksAndSync(tag: String? = null) {
         val userId = auth.currentUser?.uid ?: return
         val database = FirebaseDatabase.getInstance().getReference("Bookmarks").child(userId)
 
@@ -192,6 +192,9 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
 
             // Update bookmark status and keys in the list
             for (article in list) {
+                if (tag != null) {
+                    article.tag=tag
+                }
                 val bookmarkMatch = bookmarkedArticles.find { it.url == article.url }
                 if (bookmarkMatch != null) {
                     article.isBookmarked = true
