@@ -8,11 +8,17 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Collections
@@ -25,7 +31,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     private val list = ArrayList<Data>()
     private lateinit var progressBar: ProgressBar
     private lateinit var auth: FirebaseAuth
-
+    private val searchQueryFlow = MutableStateFlow<String>("")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         searchView = view.findViewById(R.id.search_view)
         recyclerView = view.findViewById(R.id.recycler_view_search)
@@ -43,6 +49,8 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         setupSwipeGestures()
     }
 
+
+
     private fun setupSearchListener() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -50,9 +58,23 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
                 return false
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean = false
+            override fun onQueryTextChange(newText: String?): Boolean {
+                searchQueryFlow.value = newText ?: "" // Emit new search query
+                return false
+            }
         })
+
+        lifecycleScope.launch {
+            searchQueryFlow
+                .debounce(500) // Delay API calls by 500ms
+                .filter { it.isNotEmpty() } // Ignore empty queries
+                .distinctUntilChanged() // Only emit if query is different
+                .collect { query ->
+                    fetchNews(query)
+                }
+        }
     }
+
 
     private fun setupAdapterListeners() {
         // Handle item click for WebView redirection
