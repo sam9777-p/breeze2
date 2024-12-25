@@ -1,5 +1,6 @@
 package com.example.breeze
 
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -90,7 +91,12 @@ class Home : Fragment(R.layout.home_fragment) {
         // Launch a coroutine
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                // Fetch data in the background
+
+                if (!isNetworkAvailable()) {
+                    throw NoInternetException("No internet connection available")
+                }
+
+
                 val response = withContext(Dispatchers.IO) { api.getNews() }
 
                 if (response.data != null) {
@@ -98,6 +104,10 @@ class Home : Fragment(R.layout.home_fragment) {
                     list.addAll(response.data!!)
                     fetchBookmarksAndSync()
                 }
+            }catch (e: NoInternetException) {
+                // Handle no internet connection
+                Log.e("HomeFragment", "No internet connection: ${e.message}")
+                Toast.makeText(requireContext(), "Please check your internet connection.", Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
                 Log.e("HomeFragment", "Failed to fetch news: ${e.message}")
                 Toast.makeText(requireContext(), "Failed to fetch news", Toast.LENGTH_SHORT).show()
@@ -197,4 +207,11 @@ class Home : Fragment(R.layout.home_fragment) {
             }
         }
     }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetworkInfo
+        return activeNetwork != null && activeNetwork.isConnected
+    }
+
 }
