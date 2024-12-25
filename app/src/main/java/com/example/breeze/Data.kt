@@ -6,7 +6,7 @@ package com.example.breeze
 data class Data(
     var key:String="",
 
-    var tag: String = "Sports",
+    var tag: String = "Trending News",
 
     val authors: List<String> = emptyList(),
 

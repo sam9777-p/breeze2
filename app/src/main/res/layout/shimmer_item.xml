@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="20dp"
+    android:layout_margin="9dp"
+    app:cardBackgroundColor="@color/white"
+    android:id="@+id/cardItem">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Shimmer Image Section -->
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerImageLayout"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="10dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background"
+                android:visibility="gone" /> <!-- Hidden until shimmer is done -->
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <!-- Shimmer Tag Section -->
+        <TextView
+            android:id="@+id/newsTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/tag_background"
+            android:padding="8dp"
+            android:text="Category Tag"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <!-- Shimmer Content Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Shimmer Title -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerTitleLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:id="@+id/articleTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="News Heading"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:visibility="gone" /> <!-- Hidden until shimmer is done -->
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <!-- Shimmer Excerpt -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerExcerptLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:id="@+id/articleExcerpt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="News Content"
+                    android:textColor="@color/black"
+                    android:textStyle="italic"
+                    android:textSize="14sp"
+                    android:visibility="gone" /> <!-- Hidden until shimmer is done -->
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <!-- Shimmer Source -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerSourceLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp">
+
+                <TextView
+                    android:id="@+id/articleSource"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Source: News Source"
+                    android:textColor="#666666"
+                    android:textSize="12sp"
+                    android:textStyle="italic"
+                    android:visibility="gone" /> <!-- Hidden until shimmer is done -->
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <!-- Shimmer Bookmark Button -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerBookmarkButtonLayout"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_gravity="end">
+
+                <ImageButton
+                    android:id="@+id/bookmarkButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="Bookmark Article"
+                    android:src="@drawable/ic_bookmark"
+                    android:visibility="gone" /> <!-- Hidden until shimmer is done -->
+            </com.facebook.shimmer.ShimmerFrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

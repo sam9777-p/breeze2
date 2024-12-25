@@ -1,3 +1,4 @@
+
 package com.example.breeze
 
 import android.annotation.SuppressLint
@@ -108,8 +109,8 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) :
         var image : ShapeableImageView
         var excerpt : TextView
         var bookmarkButton: ImageButton
-         var source:TextView
-         var tag:TextView
+        var source:TextView
+        var tag:TextView
 
         init {
             title = itemView.findViewById(R.id.articleTitle)

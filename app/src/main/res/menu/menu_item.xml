@@ -5,17 +5,17 @@
         android:id="@+id/home"
         android:title="Home"
         android:icon="@drawable/baseline_add_home_24"
-        app:showAsAction="ifRoom" />
+        />
 
     <item
         android:title="Search"
         android:id="@+id/search_action"
         android:icon="@drawable/baseline_search_24"
 
-        app:showAsAction="ifRoom" />
+       />
     <item
         android:title="Bookmarks"
         android:id="@+id/bookmarks"
-        android:icon="@drawable/ic_bookmark"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/bookmark"
+         />
 </menu>

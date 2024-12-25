@@ -75,6 +75,18 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
                 myAdapter.updateData(bookmarkList)
                 progressBar.visibility = View.GONE
 
+
+                if (bookmarkList.isEmpty()) {
+                    val fragmentManager = parentFragmentManager
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+                    fragmentTransaction.replace(R.id.fragment_container, empbookmrk())
+                    fragmentTransaction.commit()
+
+
+
+
+                }
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -155,5 +167,3 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
 
 
 }
-
-

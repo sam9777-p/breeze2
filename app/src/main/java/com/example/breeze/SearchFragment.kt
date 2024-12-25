@@ -14,11 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Collections
@@ -135,25 +137,26 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             .build()
 
         val api = retrofitBuilder.create(ApiInterface::class.java)
-        val retrofitData = api.getNews(topic = query)
+        //val retrofitData = api.getNews(topic = query)
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                // Fetch data in the background
+                val response = withContext(Dispatchers.IO) { api.getNews() }
 
-        retrofitData.enqueue(object : Callback<MyData?> {
-            override fun onResponse(call: Call<MyData?>, response: Response<MyData?>) {
-                val responseBody = response.body()
-                val products = responseBody?.data ?: emptyList<Data>()
-                list.clear()
-                list.addAll(products)
-                fetchBookmarksAndSync(query)
-                //myAdapter.notifyDataSetChanged()
+                if (response.data != null) {
+                    list.clear()
+                    list.addAll(response.data!!)
+                    fetchBookmarksAndSync(query)
+                }
+            } catch (e: Exception) {
+                Log.e("SearchFragment", "Failed to fetch news: ${e.message}")
+                Toast.makeText(requireContext(), "Failed to fetch news", Toast.LENGTH_SHORT).show()
+            } finally {
                 progressBar.visibility = View.GONE
+                //swipeRefreshLayout.isRefreshing = false
             }
+        }
 
-            override fun onFailure(call: Call<MyData?>, t: Throwable) {
-                progressBar.visibility = View.GONE
-                Toast.makeText(requireContext(), "Failed to fetch news: ${t.message}", Toast.LENGTH_SHORT).show()
-                Log.d("SearchFragment", "onFailure: ${t.message}")
-            }
-        })
     }
 
     private fun addBookmark(data: Data) {

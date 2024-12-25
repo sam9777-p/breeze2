@@ -16,6 +16,7 @@ import android.view.MenuItem
 import androidx.navigation.fragment.findNavController
 
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         replaceWithFragment(Home())

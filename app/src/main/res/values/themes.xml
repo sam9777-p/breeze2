@@ -16,19 +16,17 @@
     </style>
 
 
-        <!-- Custom toolbar style -->
+    <!-- Custom toolbar style -->
     <style name="CustomToolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:titleTextColor">#FFFFFF</item>
     </style>
-    
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
     </style>
-
-
 
 
     <style name="Theme.Breeze" parent="Base.Theme.Breeze" />
@@ -71,5 +69,10 @@
         <item name="android:queryBackground">@android:color/white</item>
         <item name="android:iconifiedByDefault">false</item>
         <item name="android:searchHintIcon">@drawable/baseline_search_24</item>
+    </style>
+
+    <style name="ThemeOverlay.Breeze.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
 </resources>

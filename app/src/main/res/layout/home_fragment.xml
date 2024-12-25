@@ -54,7 +54,7 @@
             app:layout_anchor="@id/appbar"
             app:layout_anchorGravity="end|bottom"
             android:layout_marginEnd="30dp"
-             />
+            />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
