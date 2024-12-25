@@ -72,7 +72,7 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
                         bookmarkList.add(data)
                     }
                 }
-                myAdapter.updateData(bookmarkList)
+
                 progressBar.visibility = View.GONE
 
 
@@ -81,11 +81,8 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
                     val fragmentTransaction = fragmentManager.beginTransaction()
                     fragmentTransaction.replace(R.id.fragment_container, empbookmrk())
                     fragmentTransaction.commit()
-
-
-
-
                 }
+                else myAdapter.updateData(bookmarkList)
 
             }
 
@@ -141,7 +138,6 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
                 intent.putExtra("url", list[position].url)
                 startActivity(intent)
 
-
             }
 
         })
@@ -157,6 +153,14 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
             .addOnSuccessListener {
                 list.remove(data)
                 myAdapter.notifyDataSetChanged()
+
+                if (list.isEmpty()) {
+                    val fragmentManager = parentFragmentManager
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+                    fragmentTransaction.replace(R.id.fragment_container, empbookmrk())
+                    fragmentTransaction.commit()
+                }
+
                 Toast.makeText(requireContext(), "Item removed successfully", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { exception ->
