@@ -2,8 +2,8 @@
     <!-- Base Application Theme -->
     <style name="Base.Theme.Breeze" parent="Theme.Design.Light.NoActionBar">
         <!-- Light Mode Customizations -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryContainer">@color/purple_200</item>
+        <item name="colorPrimary">#E2B126</item>
+        <item name="colorPrimaryContainer">#F4F2E0</item>
         <item name="colorOnPrimary">@color/white</item>
 
         <item name="colorSecondary">@color/teal_200</item>
