@@ -1,4 +1,3 @@
-
 package com.example.breeze
 
 import android.annotation.SuppressLint
@@ -93,7 +92,7 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) :
             notifyItemChanged(position)
         }
 
-        //Picasso.get().load(currentItem.urlToImage).into(holder.image);
+    //Picasso.get().load(currentItem.urlToImage).into(holder.image);
     }
     private fun setanimation(view: View, position: Int){
         if(position>lastpos){
