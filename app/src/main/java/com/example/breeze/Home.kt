@@ -91,19 +91,13 @@ class Home : Fragment(R.layout.home_fragment) {
         // Launch a coroutine
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-
                 if (!isNetworkAvailable()) {
                     throw NoInternetException("No internet connection available")
                 }
-
-
                 val response = withContext(Dispatchers.IO) { api.getNews() }
-
-                if (response.data != null) {
-                    list.clear()
-                    list.addAll(response.data!!)
-                    fetchBookmarksAndSync()
-                }
+                list.clear()
+                list.addAll(response.data)
+                fetchBookmarksAndSync()
             }catch (e: NoInternetException) {
                 // Handle no internet connection
                 Log.e("HomeFragment", "No internet connection: ${e.message}")
