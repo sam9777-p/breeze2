@@ -6,12 +6,9 @@
     <!-- Main Content Layout -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <!-- Heading Text -->
-
-        <!-- Search Bar -->
         <TextView
             android:id="@+id/tv_search_heading"
             android:layout_width="wrap_content"
@@ -23,6 +20,7 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
+        <!-- Search Bar -->
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
             android:layout_width="match_parent"
@@ -42,12 +40,44 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp" />
 
+        <!-- Filter Section -->
+        <LinearLayout
+            android:id="@+id/filter_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/tv_search_hint"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:elevation="4dp">
+
+            <!-- Filter by Category -->
+            <TextView
+                android:id="@+id/tv_filter_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filter by Category"
+                android:textSize="16sp"
+                android:layout_marginBottom="4dp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+
+            <!-- Filter by Date -->
+
+        </LinearLayout>
+
         <!-- RecyclerView for Search Results -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/tv_search_hint"
+            android:layout_below="@id/filter_section"
             android:layout_marginTop="8dp" />
     </RelativeLayout>
 

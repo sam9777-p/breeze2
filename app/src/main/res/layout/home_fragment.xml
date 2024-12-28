@@ -20,7 +20,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="275dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/bck4"
+                            android:src="@drawable/bck5"
                             app:layout_collapseMode="parallax" />
 
                         <androidx.appcompat.widget.Toolbar
@@ -40,7 +40,7 @@
             app:layout_anchor="@id/appbar"
             app:layout_anchorGravity="end|bottom"
             android:layout_marginRight="30dp"
-            android:backgroundTint="#facf5a"
+            android:backgroundTint="#F6F1EC"
             android:id="@+id/fab" />
 
         <ImageView

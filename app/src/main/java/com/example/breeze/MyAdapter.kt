@@ -50,11 +50,7 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) :
         list.add(position,product)
         notifyDataSetChanged()
     }
-    @SuppressLint("NotifyDataSetChanged")
-    fun filterList(list1: ArrayList<Data>){
-        list = list1
-        notifyDataSetChanged()
-    }
+
     fun updateData(newList: ArrayList<Data>) {
         list.clear()
         list.addAll(newList)

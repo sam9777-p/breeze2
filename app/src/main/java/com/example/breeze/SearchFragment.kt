@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ProgressBar
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -12,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
@@ -33,21 +36,23 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     private val list = ArrayList<Data>()
     private lateinit var progressBar: ProgressBar
     private lateinit var auth: FirebaseAuth
+    private lateinit var spinnerCategories: Spinner
     private val searchQueryFlow = MutableStateFlow<String>("")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         searchView = view.findViewById(R.id.search_view)
         recyclerView = view.findViewById(R.id.recycler_view_search)
         progressBar = view.findViewById(R.id.progressBar)
-
+        //spinnerCategories = view.findViewById(R.id.spinner_categories)
         auth = FirebaseAuth.getInstance()
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         myAdapter = MyAdapter(requireContext(), list)
         recyclerView.adapter = myAdapter
 
         fetchNews("General")
-
+        setupTabLayout()
         setupSearchListener()
         setupAdapterListeners()
+
         setupSwipeGestures()
     }
 
@@ -235,5 +240,25 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             Log.e("HomeFragment", "Failed to fetch bookmarks: ${it.message}")
         }
     }
+
+    private fun setupTabLayout() {
+        val tabLayout = view?.findViewById<TabLayout>(R.id.tab_layout)
+        val categories = listOf("General", "Technology", "Sports", "Politics")
+
+        for (category in categories) {
+            tabLayout?.addTab(tabLayout.newTab().setText(category))
+        }
+
+        tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.text?.let { fetchNews(it.toString()) }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+    }
+
+
 
 }
