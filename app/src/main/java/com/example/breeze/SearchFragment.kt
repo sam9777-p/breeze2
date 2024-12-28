@@ -141,7 +141,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 // Fetch data in the background
-                val response = withContext(Dispatchers.IO) { api.getNews() }
+                val response = withContext(Dispatchers.IO) { api.getNews(query) }
 
                 if (response.data != null) {
                     list.clear()

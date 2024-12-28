@@ -13,6 +13,7 @@ interface ApiInterface {
     @GET("/v2/search/articles")
     suspend fun getNews(
         @Query("query") topic: String= "Trending News",
-        @Query("language") language: String = "en"
+        @Query("language") language: String = "en",
+        @Query("page") page: Int = 1
     ): MyData
 }

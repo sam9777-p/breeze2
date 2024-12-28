@@ -35,6 +35,7 @@ class Home : Fragment(R.layout.home_fragment) {
     private var list = ArrayList<Data>()
     private lateinit var progressBar: ProgressBar
     private lateinit var auth: FirebaseAuth
+    private var page = 1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = view.findViewById(R.id.recyclerView)
@@ -58,6 +59,7 @@ class Home : Fragment(R.layout.home_fragment) {
             startActivity(Intent(requireContext(), pfp::class.java))
         }
         swipeRefreshLayout.setOnRefreshListener {
+            page++
             fetchNews()
         }
 
@@ -94,7 +96,7 @@ class Home : Fragment(R.layout.home_fragment) {
                 if (!isNetworkAvailable()) {
                     throw NoInternetException("No internet connection available")
                 }
-                val response = withContext(Dispatchers.IO) { api.getNews() }
+                val response = withContext(Dispatchers.IO) { api.getNews(page=page) }
                 list.clear()
                 list.addAll(response.data)
                 fetchBookmarksAndSync()
