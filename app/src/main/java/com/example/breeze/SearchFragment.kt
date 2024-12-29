@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -35,10 +36,13 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     private lateinit var myAdapter: MyAdapter
     private val list = ArrayList<Data>()
     private lateinit var progressBar: ProgressBar
+    private var coroutineJob: Job? = null
     private lateinit var auth: FirebaseAuth
     private lateinit var spinnerCategories: Spinner
     private val searchQueryFlow = MutableStateFlow<String>("")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         searchView = view.findViewById(R.id.search_view)
         recyclerView = view.findViewById(R.id.recycler_view_search)
         progressBar = view.findViewById(R.id.progressBar)
@@ -135,6 +139,12 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     }
 
     private fun fetchNews(query: String) {
+        // Check if fragment is still attached to avoid illegal state exceptions
+        if (!isAdded) {
+            Log.e("SearchFragment", "Fragment is not attached")
+            return
+        }
+
         progressBar.visibility = View.VISIBLE
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://news-api14.p.rapidapi.com/v2/")
@@ -142,27 +152,37 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
             .build()
 
         val api = retrofitBuilder.create(ApiInterface::class.java)
-        //val retrofitData = api.getNews(topic = query)
-        viewLifecycleOwner.lifecycleScope.launch {
+        coroutineJob = viewLifecycleOwner.lifecycleScope.launch {
             try {
-                // Fetch data in the background
-                val response = withContext(Dispatchers.IO) { api.getNews(query) }
+                // Ensure fragment is attached before accessing context or UI elements
+                if (isAdded) {
+                    val response = withContext(Dispatchers.IO) { api.getNews(query) }
 
-                if (response.data != null) {
-                    list.clear()
-                    list.addAll(response.data!!)
-                    fetchBookmarksAndSync(query)
+                    if (response.data != null) {
+                        list.clear()
+                        list.addAll(response.data)
+                        fetchBookmarksAndSync(query)
+                    } else {
+                        Log.e("SearchFragment", "No data found in response")
+                    }
+                } else {
+                    Log.e("SearchFragment", "Fragment is not attached to the activity")
                 }
             } catch (e: Exception) {
                 Log.e("SearchFragment", "Failed to fetch news: ${e.message}")
-                Toast.makeText(requireContext(), "Failed to fetch news", Toast.LENGTH_SHORT).show()
+
+                context?.let {
+                    Toast.makeText(it, "Failed to fetch news", Toast.LENGTH_SHORT).show()
+                }
             } finally {
-                progressBar.visibility = View.GONE
-                //swipeRefreshLayout.isRefreshing = false
+                // Ensure progress bar visibility is updated only when fragment is attached
+                if (isAdded) {
+                    progressBar.visibility = View.GONE
+                }
             }
         }
-
     }
+
 
     private fun addBookmark(data: Data) {
         val userId = auth.currentUser?.uid ?: return
@@ -259,6 +279,10 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         })
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Cancel the coroutine when fragment's view is destroyed
+        coroutineJob?.cancel()
+    }
 
 }

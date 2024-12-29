@@ -64,8 +64,9 @@ class MainActivity : AppCompatActivity() {
     private fun replaceWithFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
+
         fragmentTransaction.replace(R.id.fragment_container, fragment)
-        fragmentTransaction.commit()
+        fragmentTransaction.commitAllowingStateLoss()
     }
 
 

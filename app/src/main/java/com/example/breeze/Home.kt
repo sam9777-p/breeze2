@@ -21,11 +21,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+import kotlin.coroutines.cancellation.CancellationException
 
 class Home : Fragment(R.layout.home_fragment) {
 
@@ -34,21 +36,29 @@ class Home : Fragment(R.layout.home_fragment) {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var list = ArrayList<Data>()
     private lateinit var progressBar: ProgressBar
+    private var coroutineJob: Job? = null
     private lateinit var auth: FirebaseAuth
     private var page = 1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        progressBar = view.findViewById(R.id.progressBar)
+        auth = FirebaseAuth.getInstance()
+        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         recyclerView = view.findViewById(R.id.recyclerView)
+        val overlappingIcon = view.findViewById<ImageView>(R.id.overlapping_icon)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         myAdapter = MyAdapter(requireContext(), list)
         recyclerView.adapter = myAdapter
-        progressBar = view.findViewById(R.id.progressBar)
-        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
-        auth = FirebaseAuth.getInstance()
+
+
+
 
         auth.currentUser?.let { user ->
-            val overlappingIcon = view.findViewById<ImageView>(R.id.overlapping_icon)
+
             overlappingIcon?.let {
                 loadProfilePicture(user.uid, it)
             }
@@ -93,26 +103,37 @@ class Home : Fragment(R.layout.home_fragment) {
         // Launch a coroutine
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                if (!isNetworkAvailable()) {
-                    throw NoInternetException("No internet connection available")
+                // Check if fragment is attached before performing any operation
+                if (isAdded && context != null) {
+                    if (!isNetworkAvailable()) {
+                        throw NoInternetException("No internet connection available")
+                    }
+
+                    val response = withContext(Dispatchers.IO) { api.getNews(page = page) }
+                    list.clear()
+                    list.addAll(response.data)
+                    fetchBookmarksAndSync()
+                } else {
+                    Log.e("HomeFragment", "Fragment is not attached to the activity.")
                 }
-                val response = withContext(Dispatchers.IO) { api.getNews(page=page) }
-                list.clear()
-                list.addAll(response.data)
-                fetchBookmarksAndSync()
-            }catch (e: NoInternetException) {
-                // Handle no internet connection
+            } catch (e: NoInternetException) {
+                // Handle no internet connection error
                 Log.e("HomeFragment", "No internet connection: ${e.message}")
                 Toast.makeText(requireContext(), "Please check your internet connection.", Toast.LENGTH_LONG).show()
+            } catch (e: CancellationException) {
+                // Handle coroutine cancellation
+                Log.e("HomeFragment", "Coroutine was cancelled.")
             } catch (e: Exception) {
                 Log.e("HomeFragment", "Failed to fetch news: ${e.message}")
                 Toast.makeText(requireContext(), "Failed to fetch news", Toast.LENGTH_SHORT).show()
             } finally {
+                // Hide progress bar and stop refreshing regardless of the result
                 progressBar.visibility = View.GONE
                 swipeRefreshLayout.isRefreshing = false
             }
         }
     }
+
 
     private fun addBookmark(data: Data) {
         val userId = auth.currentUser?.uid ?: return
@@ -209,5 +230,7 @@ class Home : Fragment(R.layout.home_fragment) {
         val activeNetwork = connectivityManager.activeNetworkInfo
         return activeNetwork != null && activeNetwork.isConnected
     }
+
+
 
 }
