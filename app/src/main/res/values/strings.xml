@@ -15,11 +15,11 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <string-array name="news_categories">
-            <item>General</item>
-            <item>Technology</item>
-            <item>Sports</item>
-            <item>Politics</item>
-            <item>Entertainment</item>
+        <item>General</item>
+        <item>Technology</item>
+        <item>Sports</item>
+        <item>Politics</item>
+        <item>Entertainment</item>
     </string-array>
 
 

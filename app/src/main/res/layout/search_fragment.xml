@@ -25,6 +25,7 @@
             android:id="@+id/search_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:elevation="5dp"
             android:layout_below="@id/tv_search_heading"
             android:queryHint="Enter keywords or topics..." />
 
@@ -49,7 +50,7 @@
             android:layout_below="@id/tv_search_hint"
             android:padding="8dp"
             android:background="@android:color/white"
-            android:elevation="4dp">
+           >
 
             <!-- Filter by Category -->
             <TextView
@@ -57,12 +58,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Filter by Category"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:layout_marginBottom="4dp"
                 android:textStyle="bold" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
+                android:elevation="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

@@ -32,6 +32,8 @@
     <style name="Theme.Breeze" parent="Base.Theme.Breeze" />
 
 
+
+
     <!-- Login & Sign-Up Theme -->
     <style name="Theme.LoginAndSignUp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/purple_500</item>
@@ -76,3 +78,4 @@
         <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
 </resources>
+
