@@ -12,12 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class MyAdapter(val context: Context, var list: ArrayList<Data>) :
-    RecyclerView.Adapter<MyAdapter.MyViewHolder>(){
-
+class MyAdapter(val context: Context, var list: ArrayList<Data>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>(){
 
     private var onBookmarkToggleListener: ((Data, Boolean) -> Unit)? = null
-
     fun setOnBookmarkToggleListener(listener3: (Data, Boolean) -> Unit) {
         onBookmarkToggleListener = listener3
     }
@@ -35,10 +32,7 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) :
 
     var lastpos = -1;
 
-    private var onBookmarkClickListener: ((Data) -> Unit)? = null
-    fun setOnBookmarkClickListener(listener: (Data) -> Unit) {
-        onBookmarkClickListener = listener
-    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     fun deleteItem(position:Int){
@@ -59,7 +53,6 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.eachitem, parent, false)
-
         return MyViewHolder(itemView,myListener)
     }
 

@@ -5,10 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-
-
-
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
@@ -27,9 +23,9 @@
         android:layout_alignParentBottom="true"
         app:compatShadowEnabled="true"
         app:labelVisibilityMode="selected"
-        android:elevation="100dp"
+        android:elevation="200dp"
         android:animateLayoutChanges="true"
-        android:background="@drawable/nv"
+        android:background="@color/white"
 
 
         app:menu="@menu/menu_item" />

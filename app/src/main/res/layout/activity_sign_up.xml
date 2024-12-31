@@ -38,7 +38,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEt"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="58dp"
             android:textColor="@color/white"
             android:hint="Type your Email"
             android:inputType="textEmailAddress" />
@@ -63,7 +63,7 @@
             android:id="@+id/passET"
 
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="58dp"
             android:textColor="@color/white"
             android:hint="Type Your Password"
             android:inputType="textPassword" />
@@ -87,7 +87,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/confirmPassEt"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="58dp"
             android:textColor="@color/white"
             android:hint="Retype Your Password"
             android:inputType="textPassword" />

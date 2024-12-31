@@ -3,7 +3,6 @@ package com.example.breeze
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -21,9 +20,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
@@ -36,7 +34,6 @@ class Home : Fragment(R.layout.home_fragment) {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var list = ArrayList<Data>()
     private lateinit var progressBar: ProgressBar
-    private var coroutineJob: Job? = null
     private lateinit var auth: FirebaseAuth
     private var page = 1
 
@@ -69,7 +66,7 @@ class Home : Fragment(R.layout.home_fragment) {
             startActivity(Intent(requireContext(), pfp::class.java))
         }
         swipeRefreshLayout.setOnRefreshListener {
-            page++
+            page=(1..20).random()
             fetchNews()
         }
 
@@ -108,11 +105,22 @@ class Home : Fragment(R.layout.home_fragment) {
                     if (!isNetworkAvailable()) {
                         throw NoInternetException("No internet connection available")
                     }
-
-                    val response = withContext(Dispatchers.IO) { api.getNews(page = page) }
+                    /*val response = withContext(Dispatchers.IO) { api.getNews(page = page) }
                     list.clear()
                     list.addAll(response.data)
-                    fetchBookmarksAndSync()
+                    fetchBookmarksAndSync()*/
+
+                    val newsDeferred = async(Dispatchers.IO) { api.getNews(page = page) }
+                    val bookmarksDeferred = async(Dispatchers.IO) { fetchBookmarksAndSync() }
+
+                    val news = newsDeferred.await()
+                    list.clear()
+                    list.addAll(news.data)
+
+                    bookmarksDeferred.await() // Ensure bookmarks sync is complete
+                    myAdapter.notifyDataSetChanged()
+
+
                 } else {
                     Log.e("HomeFragment", "Fragment is not attached to the activity.")
                 }

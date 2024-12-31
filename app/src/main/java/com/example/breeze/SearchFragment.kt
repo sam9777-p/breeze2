@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.Toast
@@ -137,6 +136,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         val touchHelper = ItemTouchHelper(swipeGesture)
         touchHelper.attachToRecyclerView(recyclerView)
     }
+
 
     private fun fetchNews(query: String) {
         // Check if fragment is still attached to avoid illegal state exceptions
