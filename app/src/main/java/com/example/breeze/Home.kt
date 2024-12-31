@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -92,18 +93,40 @@ class Home : Fragment(R.layout.home_fragment) {
 
         val api = retrofit.create(ApiInterface::class.java)
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        // Creating a CoroutineExceptionHandler to catch uncaught exceptions
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
+            Log.e("HomeFragment", "Caught exception: ${exception.localizedMessage}")
+            Toast.makeText(requireContext(), "An unexpected error occurred. Please try again later.", Toast.LENGTH_SHORT).show()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch(coroutineExceptionHandler) {
             try {
                 if (isAdded) {
+                    // Fetch the news data from the API
                     val newsDeferred = async(Dispatchers.IO) { api.getNews(page = page) }
                     val news = newsDeferred.await()
+
                     list.clear()
                     list.addAll(news.data)
                     fetchBookmarksAndSync()
                 }
+            } catch (e: retrofit2.HttpException) {
+                // Handle HTTP error (e.g., rate-limiting)
+                if (e.code() == 429) {
+                    Log.e("HomeFragment", "Rate limit exceeded: ${e.message}")
+                    Toast.makeText(requireContext(), "Too many requests. Please try again later.", Toast.LENGTH_LONG).show()
+                } else {
+                    Log.e("HomeFragment", "HTTP Error: ${e.message}")
+                    Toast.makeText(requireContext(), "Failed to fetch news. Please try again later.", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: java.net.UnknownHostException) {
+                // Handle network error (e.g., no internet)
+                Log.e("HomeFragment", "Network error: ${e.message}")
+                Toast.makeText(requireContext(), "No internet connection. Please check your network settings.", Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
-                Log.e("HomeFragment", "Failed to fetch news: ${e.message}")
-                Toast.makeText(requireContext(), "Failed to fetch news", Toast.LENGTH_SHORT).show()
+                // Handle any other generic error
+                Log.e("HomeFragment", "An error occurred: ${e.message}")
+                Toast.makeText(requireContext(), "Failed to fetch news. Please try again later.", Toast.LENGTH_SHORT).show()
             } finally {
                 progressBar.visibility = View.GONE
                 swipeRefreshLayout.isRefreshing = false
