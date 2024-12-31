@@ -76,13 +76,13 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
                 progressBar.visibility = View.GONE
 
 
-                if (bookmarkList.isEmpty()) {
+                if (bookmarkList.isEmpty() && isAdded) {
                     val fragmentManager = parentFragmentManager
                     val fragmentTransaction = fragmentManager.beginTransaction()
                     fragmentTransaction.replace(R.id.fragment_container, empbookmrk())
                     fragmentTransaction.commit()
                 }
-                else myAdapter.updateData(bookmarkList)
+                else if (isAdded) myAdapter.updateData(bookmarkList)
 
             }
 
@@ -154,19 +154,24 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
                 list.remove(data)
                 myAdapter.notifyDataSetChanged()
 
-                if (list.isEmpty()) {
-                    val fragmentManager = parentFragmentManager
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.replace(R.id.fragment_container, empbookmrk())
-                    fragmentTransaction.commit()
+                if (list.isEmpty() && isAdded) { // Ensure the fragment is attached
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, empbookmrk())
+                        .commit()
                 }
 
-                Toast.makeText(requireContext(), "Item removed successfully", Toast.LENGTH_SHORT).show()
+                if (isAdded) { // Ensure the fragment is attached
+                    Toast.makeText(requireContext(), "Item removed successfully", Toast.LENGTH_SHORT).show()
+                }
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(requireContext(), "Failed to remove item: ${exception.message}", Toast.LENGTH_SHORT).show()
+                if (isAdded) { // Ensure the fragment is attached
+                    Toast.makeText(requireContext(), "Failed to remove item: ${exception.message}", Toast.LENGTH_SHORT).show()
+                }
             }
     }
+
+
 
 
 
