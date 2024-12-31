@@ -68,7 +68,10 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) : RecyclerView.
         holder.tag.text=currentItem.tag
         Glide.with(holder.itemView.context)
             .load(currentItem.thumbnail)
+            .placeholder(R.drawable.baseline_downloading)
+            .error(R.drawable.baseline_error_outline)
             .into(holder.image)
+
 
         holder.bookmarkButton.setImageResource(
             if (currentItem.isBookmarked) R.drawable.ic_bookmark else R.drawable.baseline_bookmark_border_24

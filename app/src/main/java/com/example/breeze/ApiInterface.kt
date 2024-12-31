@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface ApiInterface {
     @Headers(
-        "x-rapidapi-key:a123d43e74mshead248ff5ed7b70p1eea2djsnf086cf973dab",
+        "x-rapidapi-key:8693b24f1emsh90fffe384f7064cp1ab6edjsn2303696c045b",
         "x-rapidapi-host: news-api14.p.rapidapi.com"
     )
     @GET("/v2/search/articles")
