@@ -18,7 +18,6 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
