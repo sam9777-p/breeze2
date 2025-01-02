@@ -14,7 +14,6 @@
         android:text="WELCOME"
         android:textColor="@color/black"
         android:textSize="80dp"
-
         android:textStyle="italic" />
 
     <TextView
@@ -25,6 +24,7 @@
         android:textColor="@color/black"
         android:textSize="60dp"
         android:textStyle="italic" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:layout_width="500dp"
         android:layout_height="500dp"

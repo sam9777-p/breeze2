@@ -104,6 +104,7 @@ class SignInActivity : AppCompatActivity() {
             }
     }
 
+
     private fun handleFirebaseAuthException(exception: FirebaseAuthException): String {
         Log.e("SignInActivity", "FirebaseAuthException: ${exception.message}")
 

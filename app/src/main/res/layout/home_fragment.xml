@@ -20,7 +20,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="275dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/undraw_newspaper_cqtq"
+                            android:src="@drawable/bck5"
                             app:layout_collapseMode="parallax" />
 
                         <androidx.appcompat.widget.Toolbar

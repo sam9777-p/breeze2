@@ -196,6 +196,12 @@ class Home : Fragment(R.layout.home_fragment) {
 
     override fun onResume() {
         super.onResume()
+        val overlappingIcon = view?.findViewById<ImageView>(R.id.overlapping_icon)
+        auth.currentUser?.let { user ->
+            overlappingIcon?.let {
+                loadProfilePicture(user.uid, it)
+            }
+        }
         fetchBookmarksAndSync()
     }
 

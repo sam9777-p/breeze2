@@ -60,7 +60,8 @@
         android:textSize="26sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/btnx"
-        app:layout_constraintTop_toBottomOf="@+id/profileImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/profileImageView"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/btnx"
