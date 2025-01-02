@@ -161,7 +161,7 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
                 }
 
                 if (isAdded) { // Ensure the fragment is attached
-                    Toast.makeText(requireContext(), "Item removed successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Bookmark removed successfully", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { exception ->

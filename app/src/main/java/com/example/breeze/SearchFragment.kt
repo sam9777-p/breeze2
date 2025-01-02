@@ -222,7 +222,7 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
                 data.isBookmarked = false // Update the local data
                 data.key = null.toString() // Clear the key locally
                 myAdapter.notifyDataSetChanged()
-                Toast.makeText(requireContext(), "Item removed successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Bookmark removed successfully", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(requireContext(), "Failed to remove item: ${exception.message}", Toast.LENGTH_SHORT).show()
