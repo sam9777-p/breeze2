@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import com.example.breeze.databinding.ActivitySignInBinding
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 
 class SignInActivity : AppCompatActivity() {
 
@@ -25,24 +28,18 @@ class SignInActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.textView.setOnClickListener {
-            Log.d("SignInActivity", "Navigating to SignUpActivity")
             startActivity(Intent(this, SignUpActivity::class.java))
         }
 
         binding.forgotPasswordText.setOnClickListener {
-            val intent = Intent(this, ForgotPassword::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, ForgotPassword::class.java))
         }
-
 
         binding.sgninbutton.setOnClickListener {
             val email = binding.emailEt.text.toString().trim()
             val pass = binding.passET.text.toString().trim()
 
-            // Validate fields
             if (!validateInput(email, pass)) return@setOnClickListener
-
-            // Sign in with Firebase
             signInWithFirebase(email, pass)
         }
     }
@@ -56,7 +53,6 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun validateInput(email: String, password: String): Boolean {
-
         if (email.isEmpty()) {
             binding.emailEt.error = "Email is required"
             return false
@@ -65,8 +61,6 @@ class SignInActivity : AppCompatActivity() {
             binding.emailEt.error = "Enter a valid email address"
             return false
         }
-
-
         if (password.isEmpty()) {
             binding.passET.error = "Password is required"
             return false
@@ -75,7 +69,6 @@ class SignInActivity : AppCompatActivity() {
             binding.passET.error = "Password must be at least 6 characters"
             return false
         }
-
         return true
     }
 
@@ -83,39 +76,40 @@ class SignInActivity : AppCompatActivity() {
         binding.sgninbutton.isEnabled = false
 
         firebaseAuth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
+            .addOnCompleteListener {
                 binding.sgninbutton.isEnabled = true
-
-                if (task.isSuccessful) {
+                if (it.isSuccessful) {
                     Log.d("SignInActivity", "Sign-in successful")
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
-                    val errorMessage = when (val exception = task.exception) {
-                        is FirebaseAuthException -> {
-                            handleFirebaseAuthException(exception)
-                        }
-                        else -> {
-                            Log.e("SignInActivity", "Unknown error: ${exception?.message}")
-                            "An unexpected error occurred. Please try again."
-                        }
-                    }
-                    Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+                        exceptionHandler(it.exception) // Pass only the exception
+
                 }
+
             }
     }
 
 
-    private fun handleFirebaseAuthException(exception: FirebaseAuthException): String {
-        Log.e("SignInActivity", "FirebaseAuthException: ${exception.message}")
+    private fun exceptionHandler(exception: Exception?) {
+        when (exception) {
+            is FirebaseAuthWeakPasswordException -> {
+                Toast.makeText(this, "Weak password: ${exception.reason}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            is FirebaseAuthInvalidCredentialsException -> {
+                Toast.makeText(this, "User does not exist,\nPlease Sign Up!", Toast.LENGTH_SHORT)
+                    .show()
+            }
 
-        return when (exception.errorCode) {
-            "ERROR_INVALID_EMAIL" -> "The email address is badly formatted."
-            "ERROR_WRONG_PASSWORD" -> "The password is incorrect."
-            "ERROR_USER_DISABLED" -> "This user account has been disabled."
-            "ERROR_USER_NOT_FOUND" -> "No account found with this email."
-            "ERROR_NETWORK_REQUEST_FAILED" -> "Network error. Please check your internet connection."
-            else -> "Authentication failed. Please try again."
+            else -> {
+                Toast.makeText(this, "Error: ${exception?.localizedMessage}", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
+
+
 }
+
+
