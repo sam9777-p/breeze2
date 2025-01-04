@@ -136,7 +136,7 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:text=" Already Registered ,\n Sign In !"
+            android:text=" Already Registered ?,\n Sign In !"
             android:textColor="@color/primary"
             android:textSize="20sp"
             android:padding="10dp"

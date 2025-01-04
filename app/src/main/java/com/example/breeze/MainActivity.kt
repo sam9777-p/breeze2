@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         InternetChecker().checkInternet(this, lifecycle)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         replaceWithFragment(Home())

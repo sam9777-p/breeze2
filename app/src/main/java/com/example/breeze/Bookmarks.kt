@@ -1,27 +1,17 @@
 
 package com.example.breeze
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.example.breeze.Data
-import com.example.breeze.MyData
 import com.google.firebase.database.FirebaseDatabase
-import retrofit2.Call
-import android.annotation.SuppressLint
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.widget.ProgressBar
-
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -63,6 +53,7 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
 
         databaseRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                if (!isAdded) return
                 val bookmarkList = ArrayList<Data>()
                 // Loop through all bookmarks
 
@@ -87,6 +78,7 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
             }
 
             override fun onCancelled(error: DatabaseError) {
+                if (!isAdded) return
                 Toast.makeText(
                     requireContext(),
                     "Failed to load bookmarks: ${error.message}",
@@ -170,9 +162,6 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
                 }
             }
     }
-
-
-
 
 
 }

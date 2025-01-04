@@ -1,12 +1,82 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Breeze" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Light Mode Customizations -->
+        <item name="colorPrimary">#E2B126</item>
+        <item name="colorPrimaryContainer">#F4F2E0</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryContainer">@color/yellow</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorPrimaryContainer</item>
+        <item name="android:windowBackground">@color/backgroundLight</item>
+    </style>
+
+
+    <!-- Custom toolbar style -->
+    <style name="CustomToolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:titleTextColor">#FFFFFF</item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+
+
+    <style name="Theme.Breeze" parent="Base.Theme.Breeze" />
+
+
+
+
+    <!-- Login & Sign-Up Theme -->
+    <style name="Theme.LoginAndSignUp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:windowBackground">@color/backgroundLight</item>
+    </style>
+
+    <!-- Text Input Styles -->
+    <style name="LoginTextInputOuterFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginBottom">15dp</item>
+    </style>
+
+    <style name="LoginTextInputInnerFieldStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:textColorHint">?attr/colorOnBackground</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <!-- Search View Customization -->
+    <style name="CustomSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:queryBackground">@android:color/white</item>
+        <item name="android:iconifiedByDefault">false</item>
+        <item name="android:searchHintIcon">@drawable/baseline_search_24</item>
     </style>
 
     <style name="ThemeOverlay.Breeze.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/light_blue_900</item>
-        <item name="fullscreenTextColor">@color/light_blue_A400</item>
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
 </resources>
+

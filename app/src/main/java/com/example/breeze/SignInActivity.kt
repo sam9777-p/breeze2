@@ -7,6 +7,7 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.breeze.databinding.ActivitySignInBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
@@ -34,7 +35,7 @@ class SignInActivity : AppCompatActivity() {
         }
 
 
-        binding.button.setOnClickListener {
+        binding.sgninbutton.setOnClickListener {
             val email = binding.emailEt.text.toString().trim()
             val pass = binding.passET.text.toString().trim()
 
@@ -79,11 +80,11 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun signInWithFirebase(email: String, password: String) {
-        binding.button.isEnabled = false
+        binding.sgninbutton.isEnabled = false
 
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                binding.button.isEnabled = true
+                binding.sgninbutton.isEnabled = true
 
                 if (task.isSuccessful) {
                     Log.d("SignInActivity", "Sign-in successful")

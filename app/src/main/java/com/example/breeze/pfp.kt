@@ -30,6 +30,7 @@ class pfp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pfp)
         InternetChecker().checkInternet(this, lifecycle)
+
         auth = FirebaseAuth.getInstance()
         val tvEmail = findViewById<TextView>(R.id.tvEmail)
         val email = auth.currentUser?.email

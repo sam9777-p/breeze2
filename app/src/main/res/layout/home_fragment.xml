@@ -41,6 +41,7 @@
             app:layout_anchorGravity="end|bottom"
             android:layout_marginRight="30dp"
             android:backgroundTint="#F6F1EC"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MaterialComponents.FloatingActionButton"
             android:id="@+id/fab" />
 
         <ImageView

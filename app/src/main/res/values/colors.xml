@@ -27,7 +27,7 @@
 
     <!-- Card Background -->
     <color name="cardBackgroundLight">#FFFFFF</color>   <!-- White for Light Theme -->
-    <color name="cardBackgroundDark">#1E1E1E</color>   <!-- Dark for Dark Theme -->
+    <color name="cardBackgroundDark">#F6F0F0</color>   <!-- Dark for Dark Theme -->
     <!-- Background Colors -->
     <color name="background">#F5F5F5</color>       <!-- Light Gray Background -->
     <color name="cardBackground">#FFFFFF</color>   <!-- White Card Background -->

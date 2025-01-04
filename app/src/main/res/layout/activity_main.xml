@@ -26,8 +26,6 @@
         android:elevation="200dp"
         android:animateLayoutChanges="true"
         android:background="@color/white"
-
-
         app:menu="@menu/menu_item" />
 
 </RelativeLayout>
