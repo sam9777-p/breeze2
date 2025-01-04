@@ -83,7 +83,7 @@ class SignInActivity : AppCompatActivity() {
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
-                        exceptionHandler(it.exception) // Pass only the exception
+                        exceptionHandler(it.exception)
 
                 }
 
