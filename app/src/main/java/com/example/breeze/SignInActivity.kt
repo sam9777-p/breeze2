@@ -83,30 +83,13 @@ class SignInActivity : AppCompatActivity() {
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
-                        exceptionHandler(it.exception)
+                    Toast.makeText(this, "Invalid Email or Password !", Toast.LENGTH_SHORT)
+                        .show()
+
 
                 }
 
             }
-    }
-
-
-    private fun exceptionHandler(exception: Exception?) {
-        when (exception) {
-            is FirebaseAuthWeakPasswordException -> {
-                Toast.makeText(this, "Weak password: ${exception.reason}", Toast.LENGTH_SHORT)
-                    .show()
-            }
-            is FirebaseAuthInvalidCredentialsException -> {
-                Toast.makeText(this, "Invalid Email or Password !", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-            else -> {
-                Toast.makeText(this, "Error: ${exception?.localizedMessage}", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
     }
 
 
