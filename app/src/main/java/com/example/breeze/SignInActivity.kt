@@ -98,7 +98,7 @@ class SignInActivity : AppCompatActivity() {
                     .show()
             }
             is FirebaseAuthInvalidCredentialsException -> {
-                Toast.makeText(this, "User does not exist,\nPlease Sign Up!", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Invalid Email or Password !", Toast.LENGTH_SHORT)
                     .show()
             }
 
