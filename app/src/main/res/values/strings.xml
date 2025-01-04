@@ -13,6 +13,7 @@
         The sides exchanged views in a confidential spirit on topical issues of the Russian-Indian relations, reaffirmed their focus on further strengthening the special and privileged strategic partnership in all areas.”</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="not_registerd"><u>Not Registered Yet?\nSign Up!</u></string>
 
     <string-array name="news_categories">
         <item>General</item>

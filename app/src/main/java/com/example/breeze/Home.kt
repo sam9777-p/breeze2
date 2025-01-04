@@ -37,7 +37,6 @@ class Home : Fragment(R.layout.home_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         progressBar = view.findViewById(R.id.progressBar)
         auth = FirebaseAuth.getInstance()
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
@@ -119,10 +118,6 @@ class Home : Fragment(R.layout.home_fragment) {
                     Log.e("HomeFragment", "HTTP Error: ${e.message}")
                     Toast.makeText(requireContext(), "Failed to fetch news. Please try again later.", Toast.LENGTH_SHORT).show()
                 }
-            } catch (e: java.net.UnknownHostException) {
-                // Handle network error (e.g., no internet)
-                Log.e("HomeFragment", "Network error: ${e.message}")
-                Toast.makeText(requireContext(), "No internet connection. Please check your network settings.", Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
                 // Handle any other generic error
                 Log.e("HomeFragment", "An error occurred: ${e.message}")

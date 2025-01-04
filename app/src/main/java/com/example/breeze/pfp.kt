@@ -15,13 +15,11 @@ import com.google.firebase.auth.FirebaseAuth
 class pfp : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     lateinit var profileImageView: ImageView
-
-
+    
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
             if (currentUserId != null) {
-                // Save and Load the Profile Picture
                 saveProfilePictureUri(currentUserId, it)
                 loadProfilePicture(currentUserId, profileImageView)
             }
@@ -31,7 +29,7 @@ class pfp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pfp)
-
+        InternetChecker().checkInternet(this, lifecycle)
         auth = FirebaseAuth.getInstance()
         val tvEmail = findViewById<TextView>(R.id.tvEmail)
         val email = auth.currentUser?.email
@@ -54,7 +52,7 @@ class pfp : AppCompatActivity() {
             pickImageLauncher.launch("image/*")  // Open the gallery to pick an image
         }
 
-        // Load the profile picture when the activity is created
+
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
         currentUserId?.let {
             loadProfilePicture(it, profileImageView)
@@ -66,7 +64,7 @@ class pfp : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString("${userId}_profilePicUri", profilePicUri.toString())
-        editor.apply()  // Save asynchronously
+        editor.apply()
         Log.d("FAB_UPDATE", "Saved profile picture URI: $profilePicUri for user: $userId")
     }
 

@@ -123,20 +123,21 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/not_signin_text"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:text=" Not Registered Yet? Sign Up!"
-            android:textColor="@color/black"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:background="@drawable/sign_in_style"
+            android:padding="10dp"
+            android:text="@string/not_registerd"
+            android:textColor="@color/primary"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:layout_constraintVertical_bias="0.466" />
+            app:layout_constraintVertical_bias="0.132" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

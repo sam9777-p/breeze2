@@ -5,19 +5,19 @@
     >
 
     <ImageView
-        android:layout_width="230dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
         android:layout_height="260dp"
-        android:src="@drawable/f2" />
+        android:src="@drawable/undraw_not_found_6bgl" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="center_horizontal"
         android:gravity="bottom"
-
+        android:layout_marginTop="600dp"
         android:text="No Bookmark Added Yet"
         android:textColor="@color/black"
-
-        android:textSize="35sp" />
+        android:textSize="25sp" />
 
 </FrameLayout>

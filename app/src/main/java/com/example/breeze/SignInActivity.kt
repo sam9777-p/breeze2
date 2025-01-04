@@ -20,7 +20,7 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        InternetChecker().checkInternet(this, lifecycle)
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.textView.setOnClickListener {
