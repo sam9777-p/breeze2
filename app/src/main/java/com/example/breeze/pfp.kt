@@ -10,21 +10,26 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 
 class pfp : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     lateinit var profileImageView: ImageView
-    
-    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
-            if (currentUserId != null) {
-                saveProfilePictureUri(currentUserId, it)
-                loadProfilePicture(currentUserId, profileImageView)
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
+
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+                if (currentUserId != null) {
+                    saveProfilePictureUri(currentUserId, it)
+                    loadProfilePicture(currentUserId, profileImageView)
+                }
             }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +37,12 @@ class pfp : AppCompatActivity() {
         InternetChecker().checkInternet(this, lifecycle)
 
         auth = FirebaseAuth.getInstance()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
         val tvEmail = findViewById<TextView>(R.id.tvEmail)
         val email = auth.currentUser?.email
 
@@ -52,7 +63,6 @@ class pfp : AppCompatActivity() {
         profileImageView.setOnClickListener {
             pickImageLauncher.launch("image/*")  // Open the gallery to pick an image
         }
-
 
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
         currentUserId?.let {
@@ -85,3 +95,4 @@ class pfp : AppCompatActivity() {
 
 
 }
+

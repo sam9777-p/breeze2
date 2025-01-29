@@ -17,21 +17,20 @@ class InternetChecker {
                         // ...
                     }
                 }
-
-                cancelable = false // Optional
-                noInternetConnectionTitle = "No Internet" // Optional
+                cancelable = false
+                noInternetConnectionTitle = "No Internet"
                 noInternetConnectionMessage =
                     "Check your Internet connection and try again." // Optional
                 showInternetOnButtons = true // Optional
                 pleaseTurnOnText = "Please turn on" // Optional
-                wifiOnButtonText = "Wifi" // Optional
-                mobileDataOnButtonText = "Mobile data" // Optional
+                wifiOnButtonText = "Wifi"
+                mobileDataOnButtonText = "Mobile data"
 
-                onAirplaneModeTitle = "No Internet" // Optional
+                onAirplaneModeTitle = "No Internet"
                 onAirplaneModeMessage = "You have turned on the airplane mode." //optional
-                pleaseTurnOffText = "Please turn off" // Optional
-                airplaneModeOffButtonText = "Airplane mode" // Optional
-                showAirplaneModeOffButtons = true // Optional
+                pleaseTurnOffText = "Please turn off"
+                airplaneModeOffButtonText = "Airplane mode"
+                showAirplaneModeOffButtons = true
             }
         }.build()
 

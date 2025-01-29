@@ -17,3 +17,4 @@ interface ApiInterface {
         @Query("page") page: Int = 1
     ): MyData
 }
+

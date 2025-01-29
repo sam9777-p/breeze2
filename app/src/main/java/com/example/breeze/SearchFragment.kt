@@ -1,18 +1,28 @@
 package com.example.breeze
 
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -27,6 +37,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Collections
+import java.util.Locale
 
 class SearchFragment : Fragment(R.layout.search_fragment) {
 
@@ -34,11 +45,19 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
     private lateinit var recyclerView: RecyclerView
     private lateinit var myAdapter: MyAdapter
     private val list = ArrayList<Data>()
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var progressBar: ProgressBar
     private var coroutineJob: Job? = null
     private lateinit var auth: FirebaseAuth
     private lateinit var spinnerCategories: Spinner
     private val searchQueryFlow = MutableStateFlow<String>("")
+    private lateinit var voiceSearchButton: ImageButton
+
+    companion object {
+        private const val REQUEST_CODE_SPEECH_INPUT = 100
+        private const val REQUEST_MIC_PERMISSION = 101
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -47,6 +66,24 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         progressBar = view.findViewById(R.id.progressBar)
         //spinnerCategories = view.findViewById(R.id.spinner_categories)
         auth = FirebaseAuth.getInstance()
+        voiceSearchButton = view.findViewById(R.id.voice_search_button)
+
+        voiceSearchButton.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(),
+                    arrayOf(android.Manifest.permission.RECORD_AUDIO), REQUEST_MIC_PERMISSION)
+            } else {
+                startVoiceSearch()
+            }
+        }
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         myAdapter = MyAdapter(requireContext(), list)
         recyclerView.adapter = myAdapter
@@ -284,5 +321,32 @@ class SearchFragment : Fragment(R.layout.search_fragment) {
         // Cancel the coroutine when fragment's view is destroyed
         coroutineJob?.cancel()
     }
+
+    private val voiceSearchLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val speechResult = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                val spokenText = speechResult?.get(0) ?: ""
+
+                // Set query in SearchView
+                searchView.setQuery(spokenText, true)
+            }
+        }
+
+    private fun startVoiceSearch() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to search")
+        }
+
+        try {
+            voiceSearchLauncher.launch(intent) // Use voiceSearchLauncher here
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Speech Recognition not supported!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 
 }

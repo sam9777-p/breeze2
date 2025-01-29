@@ -1,9 +1,11 @@
 package com.example.breeze
 
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -14,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         InternetChecker().checkInternet(this, lifecycle)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
+        //createNotificationChannel()
         replaceWithFragment(Home())
 
 
@@ -28,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+
     private fun replaceWithFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -36,6 +40,27 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commitAllowingStateLoss()
     }
 
+    /*import android.app.NotificationChannel
+    import android.app.NotificationManager
+    import android.os.Build
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "default_channel_id"
+            val channelName = "Default Channel"
+            val channelDescription = "Channel for general notifications"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, channelName, importance).apply {
+                description = channelDescription
+            }
+
+            /
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager?.createNotificationChannel(channel)
+        }
+    }
+
+*/
 
 }
 

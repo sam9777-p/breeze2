@@ -20,14 +20,40 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <!-- Search Bar -->
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_view"
+        <!-- Search Bar Container -->
+        <RelativeLayout
+            android:id="@+id/search_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="5dp"
             android:layout_below="@id/tv_search_heading"
-            android:queryHint="Enter keywords or topics..." />
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:orientation="horizontal">
+
+            <!-- SearchView -->
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:queryHint="Enter keywords or topics..."
+                android:iconifiedByDefault="false"
+                android:background="@android:color/white"
+                android:elevation="5dp"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/voice_search_button"/>
+
+            <!-- Voice Search Button -->
+            <ImageButton
+                android:id="@+id/voice_search_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_btn_speak_now"
+
+                android:contentDescription="Voice Search"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+        </RelativeLayout>
 
         <!-- Hint Text -->
         <TextView
@@ -37,7 +63,7 @@
             android:text="Example: Technology, Sports, Politics"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"
-            android:layout_below="@id/search_view"
+            android:layout_below="@id/search_container"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp" />
 
@@ -49,8 +75,7 @@
             android:orientation="vertical"
             android:layout_below="@id/tv_search_hint"
             android:padding="8dp"
-            android:background="@android:color/white"
-           >
+            android:background="@android:color/white">
 
             <!-- Filter by Category -->
             <TextView
@@ -67,10 +92,6 @@
                 android:elevation="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
-
-
-            <!-- Filter by Date -->
 
         </LinearLayout>
 

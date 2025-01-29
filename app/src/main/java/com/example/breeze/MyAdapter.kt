@@ -2,11 +2,13 @@ package com.example.breeze
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -15,12 +17,13 @@ import com.google.android.material.imageview.ShapeableImageView
 class MyAdapter(val context: Context, var list: ArrayList<Data>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>(){
 
     private var onBookmarkToggleListener: ((Data, Boolean) -> Unit)? = null
+
     fun setOnBookmarkToggleListener(listener3: (Data, Boolean) -> Unit) {
         onBookmarkToggleListener = listener3
     }
 
-
     private lateinit var myListener: onItemClickListener
+
 
     interface onItemClickListener {
         fun onItemClicking(position: Int)
@@ -33,12 +36,12 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) : RecyclerView.
     var lastpos = -1;
 
 
-
     @SuppressLint("NotifyDataSetChanged")
     fun deleteItem(position:Int){
         list.removeAt(position)
         notifyDataSetChanged()
     }
+
     @SuppressLint("NotifyDataSetChanged")
     fun addItem(position: Int, product: Data){
         list.add(position,product)
@@ -77,6 +80,10 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) : RecyclerView.
             if (currentItem.isBookmarked) R.drawable.ic_bookmark else R.drawable.baseline_bookmark_border_24
         )
 
+        holder.shareButton.setOnClickListener {
+            shareArticle(holder.itemView.context, currentItem.title, currentItem.url)
+        }
+
         setanimation(holder.itemView, position)
         holder.bookmarkButton.setOnClickListener {
             currentItem.isBookmarked = !currentItem.isBookmarked
@@ -92,7 +99,6 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) : RecyclerView.
             view.startAnimation(animation)
             lastpos = position
         }
-
     }
 
     class MyViewHolder(itemView : View,listener2: onItemClickListener) : RecyclerView.ViewHolder(itemView){
@@ -100,6 +106,7 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) : RecyclerView.
         var image : ShapeableImageView
         var excerpt : TextView
         var bookmarkButton: ImageButton
+        var shareButton:ImageView
         var source:TextView
         var tag:TextView
 
@@ -110,11 +117,21 @@ class MyAdapter(val context: Context, var list: ArrayList<Data>) : RecyclerView.
             bookmarkButton = itemView.findViewById(R.id.bookmarkButton)
             source = itemView.findViewById(R.id.articleSource)
             tag=itemView.findViewById(R.id.newsTag)
+            shareButton= itemView.findViewById(R.id.shareButton)
             itemView.setOnClickListener {
                 listener2.onItemClicking(adapterPosition)
             }
         }
-
     }
+
+    private fun shareArticle(context: Context, title: String, url: String) {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, "Check out this news article!")
+            putExtra(Intent.EXTRA_TEXT, "$title\nRead more: $url")
+        }
+        context.startActivity(Intent.createChooser(shareIntent, "Share via"))
+    }
+
 
 }

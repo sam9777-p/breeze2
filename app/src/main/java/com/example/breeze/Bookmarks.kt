@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.firebase.database.FirebaseDatabase
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -12,6 +11,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,6 +31,7 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
     private lateinit var auth: FirebaseAuth
     private val bookmarkedList = ArrayList<Data>()
     private lateinit var progressBar: ProgressBar
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
     //private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
 
@@ -41,6 +44,12 @@ class Bookmarks : Fragment(R.layout.bookmarks_fragment) {
         recyclerView.adapter = myAdapter
         progressBar=view.findViewById(R.id.Pg_bar)
         auth = FirebaseAuth.getInstance()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
         val userId = auth.currentUser?.uid ?: return
         myAdapter.setOnBookmarkToggleListener { data, isBookmarked ->
             if (!isBookmarked) {

@@ -15,9 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+
+
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -31,6 +36,7 @@ class Home : Fragment(R.layout.home_fragment) {
     private lateinit var myAdapter: MyAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private val list = ArrayList<Data>()
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var progressBar: ProgressBar
     private lateinit var auth: FirebaseAuth
     private var page = 1
@@ -39,6 +45,12 @@ class Home : Fragment(R.layout.home_fragment) {
         super.onViewCreated(view, savedInstanceState)
         progressBar = view.findViewById(R.id.progressBar)
         auth = FirebaseAuth.getInstance()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         recyclerView = view.findViewById(R.id.recyclerView)
         val overlappingIcon = view.findViewById<ImageView>(R.id.overlapping_icon)
@@ -83,6 +95,7 @@ class Home : Fragment(R.layout.home_fragment) {
     }
 
     private fun fetchNews() {
+
         progressBar.visibility = View.VISIBLE
 
         val retrofit = Retrofit.Builder()
@@ -109,6 +122,7 @@ class Home : Fragment(R.layout.home_fragment) {
                     list.addAll(news.data)
                     fetchBookmarksAndSync()
                 }
+
             } catch (e: retrofit2.HttpException) {
                 // Handle HTTP error (e.g., rate-limiting)
                 if (e.code() == 429) {
@@ -189,6 +203,7 @@ class Home : Fragment(R.layout.home_fragment) {
             }
     }
 
+
     override fun onResume() {
         super.onResume()
         val overlappingIcon = view?.findViewById<ImageView>(R.id.overlapping_icon)
@@ -213,3 +228,4 @@ class Home : Fragment(R.layout.home_fragment) {
         }
     }
 }
+
